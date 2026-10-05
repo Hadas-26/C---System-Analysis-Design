@@ -1,0 +1,21 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager;
+@inject UserManager<User> userManager;
+
+@{
+    ViewData["Title"] = "Learn More";
+}
+
+
+<div class="row">
+    <partial name="SideMenu" />
+
+    <!--Main Content-->
+    <div class="col mt-3">
+        <div class="text-center">
+            <h1 class="display-4 mb-3 mb-md-5">This is the Learn More page</h1>
+        </div>
+    </div>
+</div>
+
+

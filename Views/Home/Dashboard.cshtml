@@ -1,0 +1,115 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager;
+@inject UserManager<User> userManager;
+
+
+<div class="row">
+    <partial name="SideMenu" />
+    
+    <!--Main Content-->
+    <div class="col mt-3">
+
+        <div class="row healthnet-bg-blue text-white m-3 rounded p-3">
+            <div class="col-6">
+                <h2>Welcome, Medicaid Employee</h2>
+                <p>Review applicant documents and verify eligibility.</p>
+            </div>
+            <div class="col-6 text-end">
+                <i class="fas fa-clipboard-list fa-4x"></i>
+            </div>
+        </div>
+
+        <div class="row m-5">
+            <div class="col-4">
+                <div class="row text-center align-items-center">
+                    <div class="col-6">
+                        <i class="fa fa-folder fa-3x"></i>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">Total Applicants</div>
+                        <div class="row fw-bold fs-3">24</div>
+                        <div class="row">Applications recieved</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row text-center align-items-center">
+                    <div class="col-6">
+                        <i class="fas fa-hourglass-half fa-3x"></i>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">Total Applicants</div>
+                        <div class="row fw-bold fs-3">8</div>
+                        <div class="row">Applications recieved</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="row text-center align-items-center">
+                    <div class="col-6">
+                        <i class="fa fa-file-alt fa-3x"></i>
+                    </div>
+                    <div class="col-6">
+                        <div class="row">Total Applicants</div>
+                        <div class="row fw-bold fs-3">15</div>
+                        <div class="row">Applications recieved</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row ms-5 me-5 mt-5">
+            <div class="col-6">
+                <p class="fs-4 fw-semibold">Applications requiring review</p>
+            </div>
+            <div class="col-6 text-end">
+                <p class="fs-5">Review applications</p>
+            </div>
+        </div>
+
+        <div class="row ms-5 me-5">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Application</th>
+                        <th scope="col">Applicant</th>
+                        <th scope="col">Submitted</th>
+                        <th scope="col">Documents</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!--This will be handled with a loop to query applications-->
+                    <tr>
+                        <th scope="row">MED 1001</th>
+                        <td>John Smith</td>
+                        <td>Sep 10, 2026</td>
+                        <td>3/3</td>
+                        <td><div class="bg-warning-subtle p-2 rounded text-center text-warning-emphasis fw-semibold">Pending</div></td>
+                        <td><div class="text-center"><button class="btn btn-primary">Review</button></div></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">MED 1002</th>
+                        <td>Jane Doe</td>
+                        <td>Sep 12, 2026</td>
+                        <td>3/3</td>
+                        <td><div class="bg-success-subtle p-2 rounded text-center text-success-emphasis fw-semibold">Verified</div></td>
+                        <td><div class="text-center"><button class="btn btn-primary">View</button></div></td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">MED 1003</th>
+                        <td>Robert Johnson</td>
+                        <td>Sep 13, 2026</td>
+                        <td>2/3</td>
+                        <td><div class="bg-danger-subtle p-2 rounded text-center text-danger-emphasis fw-semibold">Missing</div></td>
+                        <td><div class="text-center"><button class="btn btn-primary">Review</button></div></td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

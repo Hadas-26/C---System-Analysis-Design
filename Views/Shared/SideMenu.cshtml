@@ -1,0 +1,52 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager;
+@inject UserManager<User> userManager;
+
+<!--Side Menu-->
+<aside class="col-2 healthnet-bg-blue min-vh-100 p-4">
+    <div class="healthnet-bg-blue text-white">
+        <div class="row">
+            <div class="col text-center fw-bold mb-5">
+                Main Menu
+            </div>
+        </div>
+        <div class="row">
+            <div class="list-group">
+
+                    
+                    
+                <a asp-action="Index" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-home"></span> Home</a>
+                <a asp-action="LearnMore" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-bar-chart"></span> Learn About H.R. 1</a>
+                <a href="#" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-bar-chart"></span> Q & A</a>
+
+                    
+                @if (signInManager.IsSignedIn(User))
+                {
+
+                    @if (User.IsInRole("Employee"))
+                    {
+                        <a asp-action="Dashboard" class="list-group-item list-group-item-action list-group-item-primary"><i class="fa fa-table-columns me-2 fa-fw"></i>Employee Dashboard</a>
+
+                    }
+                    else if (User.IsInRole("Applicant"))
+                    {
+                        @* <a href="#" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-bar-chart"></span> Applicant Stuff</a> *@
+                        <a asp-action="SeeIfIQualify" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-question-circle"></span> See If I Qualify</a>
+                        <a asp-action="Apply" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-file-alt"></span> Apply Now</a>
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-file-alt"></span> Application Status</a>
+                    }
+                    else
+                    {
+                        <a href="#" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-bar-chart"></span> No Role Stuff</a>
+                    }
+                    
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="list-group-item list-group-item-action list-group-item-primary"><span class="fa fa-bar-chart"></span> Log In</a>
+                }
+
+            </div>
+        </div>
+    </div>
+</aside>

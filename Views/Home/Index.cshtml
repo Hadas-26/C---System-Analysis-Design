@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager;
+@inject UserManager<User> userManager;
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="row">
+    
+    <partial name="SideMenu" />
+    <!--Main Content-->
+    <div class="col mt-3">
+        <div class="text-center">
+            <h1 class="display-4 mb-3 mb-md-5">Apply for MO HealthNet through the <strong>MEVA</strong> application</h1>
+            <div class="row mb-3 mb-md-5">
+                <div class="col-6 offset-3">
+                    <img src="/images/hr1-for-the-people-act-1160x768.jpg" class="img-fluid rounded" />
+                </div>
+            </div>
+            <h2>What help is available?</h2>
+            <p>If you do not have health insurance or you need help paying for your health care, you may be eligible for coverage through Missouri's Medicaid program, called MO HealthNet.</p>
+
+            <h2>Who is eligible?</h2>
+            <p><strong>Eligibility for MO HealthNet</strong> depends on your income, age, health, and individual needs. You may be eligible if you are:</p>
+            <div class="col-6 offset-3">
+                <ul class="list-group">
+                <li class="list-group-item">
+                    <p>A senior citizen (age 65 or older)</p>
+                </li>
+                <li class="list-group-item">
+                    <p>A parent or caretaker with a child under the age of 19</p>
+                </li>
+                <li class="list-group-item">
+                    <p>A woman age 18-55 with no health insurance</p>
+                </li>
+                <li class="list-group-item">
+                    <p>An adult ages 19-64 with no disabilities</p>
+                </li>
+                <li class="list-group-item">
+                    <p>A pregnant woman</p>
+                </li>
+                <li class="list-group-item">
+                    <p>A woman under the age of 65 with breast or curvical cancer</p>
+                </li>
+                <li class="list-group-item">
+                    <p>A person with disabilities</p>
+                </li>
+                <li class="list-group-item">
+                    <p>A blind or visually impaired adult</p>
+                </li>
+            </ul>
+            </div>
+
+            <h2>Why Use the Medicaid Verification App?</h2>
+
+            <p>The Medicaid Employment Verification Application (<strong>MEVA</strong>) is designed to help applicants quickly and reliably verify their qualifying hours.
+                Applicants register with the our service, fill out the application, and upload any required documentation. A Medicaid employee reviews the application and 
+                any related documentation. If further documentation is required, the Medicaid employee relays a message to the applicant, otherwise the employee either approves 
+            or denies the application based on the H.R. 1 criteria.</p>
+        </div>
+    </div>
+</div>
+
+

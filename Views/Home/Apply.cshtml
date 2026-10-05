@@ -1,0 +1,248 @@
+﻿
+@section Scripts {
+    <script src="~/js/apply.js" asp-append-version="true"></script>
+    <script src="~/js/apply-required-docs.js" asp-append-version="true"></script>
+}
+
+<h1>This is where the application will be</h1>
+
+
+
+<div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+        <form action="submit" method="post" enctype="multipart/form-data">
+
+            <div class="row g-3 mb-3">
+
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" id="FirstNamed" name="FirstNamed" class="form-control" required>
+                        <label for="FirstNamed">First Name</label>
+                    </div>
+                </div>
+
+                <div class="col col-sm-2">
+                    <div class="form-floating">
+                        <input type="text" id="MiddleInitial" name="MiddleInitial" class="form-control" required>
+                        <label for="MiddleInitial">Middle Initial</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" id="LastNamed" name="LastNamed" class="form-control" required>
+                        <label for="LastNamed">Last Name</label>
+                    </div>
+                </div>
+
+                        
+            </div>
+
+            <div class="row g-1 mb-3">
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" id="Address" name="Address" class="form-control" required>
+                        <label for="Address">Address</label>
+                    </div>
+                </div>
+            </div>
+
+                    
+            <div class="row g-3 mb-3">
+
+                <div class="col-sm-7">
+                    <div class="form-floating">
+                        <input type="text" id="City" name="City" class="form-control" required>
+                        <label for="City">City</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" id="State" name="State" class="form-control" required>
+                        <label for="State">State</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="text" id="ZipCode" name="ZipCode" class="form-control" required>
+                        <label for="ZipCode">Zip Code</label>
+                    </div>
+                </div>
+            </div>
+
+                        
+            <div class="row g-2 mb-3">
+
+                <div class="col-sm-5">
+                    <div class="form-floating">
+                        <input type="tel" id="PhoneNumber" name="PhoneNumber" class="form-control" required>
+                        <label for="PhoneNumber">Phone Number</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <div class="form-floating">
+                        <input type="email" id="Email" name="Email" class="form-control" required>
+                        <label for="Email">Email</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col col-sm-9">
+                    <div class="form-floating">
+                        <select id="VolunteerStatus" name="VolunteerStatus" class="form-select" required>
+                            <option value="">Volunteer Status</option>
+                            <option value="Active">Currently Volunteering</option>
+                            <option value="Inactive">Not Currently Volunteering</option>
+                        </select>
+                        <label for="VolunteerStatus" class="form-label visually-hidden">Volunteer Status</label>
+                    </div>
+                </div>
+
+                <div class="col d-none" id="VolunteerHoursField">
+                    <div class="form-floating">
+                        <input type="number" id="VolunteerHours" name="VolunteerHours" class="form-control" min="0" required>
+                        <label for="VolunteerHours" class="form-label">Monthly Hours</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-9 mb-3 mb-md-0">
+                    <div class="form-floating">
+                        <select id="EmploymentStatus" name="EmploymentStatus" class="form-select" required>
+
+                            <option value="">Employment Status</option>
+                            <option value="EmployedHalftime">Employment (Half-time)</option>
+                            <option value="EmployedFulltime">Employment (Full-time)</option>
+                            <option value="Unemployed">Unemployed</option>
+                            <option value="Retired">Retired</option>
+                        </select>
+                        <label for="EmploymentStatus" class="form-label visually-hidden">Employment Status</label>
+                    </div>
+                </div>
+
+                <div class="col d-none" id="EmploymentField">
+                    <div class="form-floating">
+                        <input type="number" id="MonthlyIncome" name="MonthlyIncome" step="0.01" class="form-control" min="0" required>
+                        <label for="MonthlyIncome" class="form-label">Monthly Income</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-9 mb-3 mb-md-0">
+                    <div class="form-floating">
+                        <select id="EducationStatus" name="EducationStatus" class="form-select" required>
+                            <option value="">Education Status</option>
+                            <option value="FullTime">Attending Full-time</option>
+                            <option value="PartTime">Attending Part-time</option>
+                            <option value="NotAttending">Not Attending</option>
+                        </select>
+                        <label for="EducationStatus" class="form-label visually-hidden">Education Status</label>
+                    </div>
+                </div>
+
+                <div class="col d-none" id="EducationField">
+                    <div class="form-floating">
+                        <input type="number" id="CreditHours" name="CreditHours" step="1" class="form-control" min="0" required>
+                        <label for="CreditHours" class="form-label">Credit Hours</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+
+                <div class="form-floating">
+                    <select id="MaritalStatus" name="MaritalStatus" class="form-select" required>
+                        <option value="">Marital Status</option>
+                        <option value="Single">Single</option>
+                        <option value="Married">Married</option>
+                        <option value="Divorced">Divorced</option>
+                        <option value="Widowed">Widowed</option>
+                    </select>
+                    <label for="MaritalStatus" class="form-label visually-hidden">Marital Status</label>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="checkbox" id="DisabledStatus" name="DisabledStatus" class="form-check-input">
+                    <label for="DisabledStatus" class="form-label me-2">Are you legally disabled?</label>
+                </div>
+
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="checkbox" id="PregnancyStatus" name="PregnancyStatus" class="form-check-input">
+                    <label for="PregnancyStatus" class="form-label me-2">Are you pregnant?</label>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <input type="checkbox" id="CaregiverStatus" name="CaregiverStatus" class="form-check-input">
+                    <label for="CaregiverStatus" class="form-label me-2">Are you the primary caregiver of dependents?</label>
+                    <button type="button"
+                            class="btn p-0 border-0"
+                            data-bs-toggle="popover"
+                            data-bs-trigger="focus"
+                            data-bs-title="Caregiver Status"
+                            data-bs-placement="right"
+                            data-bs-content="A primary caregiver is someone who provides the majority of care for a dependent,
+                        such as a child, elderly person, or someone with a disability.
+                        This may include tasks such as feeding, bathing, administering medication,
+                        and providing emotional support.">
+                        <span class="bi bi-info-circle"></span>
+                    </button>
+
+                </div>
+            </div>
+
+                    
+
+            <div class="row mb-3">
+
+                <div class="col-12 d-none" id="requiredDocsSection">
+                </div>
+
+                <label class="col-form-label col-md-3" for="Documentation">
+                    Upload Documentation
+                    <span>
+                        <button type="button"
+                                class="btn p-0 border-0 col-md-1"
+                                data-bs-toggle="popover"
+                                data-bs-trigger="focus"
+                                data-bs-placement="right"
+                                data-bs-title="Documentation"
+                                data-bs-content="Please upload all required documentation for your application.
+                            Required documentation depends on your specific circumstances. For instance, if you are pregnant, you may need to provide a doctor's note or medical records.
+                            If you are a primary caregiver, you may need to provide legal documents or proof of guardianship. If you are disabled, you may need to provide medical records or a disability determination letter.
+                            If you are employed, you may need to provide pay stubs or tax returns. If you are attending school, you may need to provide transcripts or enrollment verification.">
+
+                            <span class="bi bi-info-circle"></span>
+                        </button>
+                    </span>
+                </label>
+
+                <input type="file" id="documentation" name="Documentation" multiple accept=".pdf, .jpg, .jpeg, .png, .doc, .docx" class="form-control">
+                <div id="fileList" class="mt-2"></div>
+
+            </div>
+
+                        
+
+
+            <div class="row mb-3">
+                <div class="col  text-start">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                    <a asp-action="Index" class="btn btn-outline-danger">Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
