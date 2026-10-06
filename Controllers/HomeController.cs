@@ -42,6 +42,12 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         {
             return View();
         }
+
+        [AllowAnonymous]
+        public IActionResult FAQs()
+        {
+            return View();
+        }
         
     }
 }
