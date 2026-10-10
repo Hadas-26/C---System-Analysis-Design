@@ -20,7 +20,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
             //Apply configurations here
             modelBuilder.Entity<Applicant>().HasIndex(a => a.Id).IsUnique();
-            //modelBuilder.Entity<Employee>().HasIndex(e => e.EmployeeId).IsUnique();
+            modelBuilder.Entity<Employee>().HasIndex(e => e.EmployeeId).IsUnique();
 
             //modelBuilder.Entity<Employee>().HasData(
             //    new Employee { }

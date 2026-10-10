@@ -11,11 +11,14 @@
 
         if (VolunteerStatus.value === 'Active') {
             VolunteerHoursField.classList.remove('d-none');
-
+            VolunteerHoursField.disabled = false;
+            VolunteerHoursField.required = true;
         }
         else {
             VolunteerHoursField.classList.add('d-none');
             VolunteerHoursField.querySelector('input').value = ''; //Reset the input value when the field is hidden
+            VolunteerHoursField.disabled = true;
+            VolunteerHoursField.required = false;
 
         }
 
@@ -28,9 +31,14 @@
 
         if (EmploymentStatus.value === 'EmployedHalftime' || EmploymentStatus.value === 'EmployedFulltime') {
             EmploymentField.classList.remove('d-none');
+            EmploymentField.disabled = false;
+            EmploymentField.required = true;
         }
         else {
             EmploymentField.classList.add('d-none');
+            EmploymentField.disabled = true;
+            EmploymentField.required = false;
+
             EmploymentField.querySelector('input').value = ''; //Reset the input value when the field is hidden
         }
     });
@@ -42,10 +50,14 @@
 
         if (EducationStatus.value === 'FullTime' || EducationStatus.value === 'PartTime') {
             EducationField.classList.remove('d-none');
+            EducationField.required = true;
+            EducationField.disabled = false;
         }
         else {
             EducationField.classList.add('d-none');
             EducationField.querySelector('input').value = ''; //Reset the input value when the field is hidden
+            EducationField.required = false;
+            EducationField.disabled = true;
         }
     });
 

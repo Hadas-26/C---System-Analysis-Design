@@ -38,23 +38,10 @@
 
                 
                 <div class="navbar-collapse collapse d-sm-flex">
-                    <ul class="navbar-nav me-auto mb-2 mb-sm-0">
-
-                        @* <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        @if (signInManager.IsSignedIn(User))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Dashboard</a>
-                            </li>
-                                
-                        } *@
-                    </ul>
 
                     @if(signInManager.IsSignedIn(User))
                     {
-                        <div class="d-flex align-items-center gap-3">
+                        <div class="d-flex align-items-center gap-3 ms-auto">
                             <div class="text-white text-end">
                                 <small class="d-block opacity-75">
                                     Signed in as
@@ -71,7 +58,7 @@
                     }
                     else
                     {
-                        <a class="btn btn-outline-light btn-sm" asp-controller="Account" asp-action="Login">Sign In</a>
+                        <a class="btn btn-outline-light btn-sm ms-auto" asp-controller="Account" asp-action="Login">Sign In</a>
                     }
                 </div>
                 
@@ -89,7 +76,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2026 - MedicaidEmploymentVerificationApplication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a> 
+            &copy; @DateTime.Now.Year - MedicaidEmploymentVerificationApplication
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

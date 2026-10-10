@@ -1,13 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace MedicaidEmploymentVerificationApplication.Models
 {
-    public class Application
+    public class ApplyModel
     {
-        
-        public int Id { get; set; }
-
         [Required]
         public string FirstName { get; set; } = string.Empty;
 
@@ -62,8 +58,6 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
         public bool PrimaryCaregiverStatus { get; set; }
 
-        public int UserId { get; set; }
-
-        public User User { get; set; } = null!;
+        public List<IFormFile> Documents { get; set; } = new();
     }
 }

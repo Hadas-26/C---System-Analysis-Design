@@ -1,4 +1,5 @@
 using MedicaidEmploymentVerificationApplication.Models;
+using MedicaidEmploymentVerificationApplication.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,9 +37,11 @@ builder.Services.AddSession(option =>
 
 var app = builder.Build();
 
-//Create Roles
 using (var scope = app.Services.CreateScope())
 {
+
+    
+    //Create Roles
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     string[] roles = { "Applicant", "Employee" };
@@ -55,6 +58,12 @@ using (var scope = app.Services.CreateScope())
                 throw new InvalidOperationException($"Could not create role '{role}': {string.Join(", ", result.Errors.Select(e => e.Description))}");
             }
         }
+    }
+
+    //Seed users
+    if (app.Environment.IsDevelopment())
+    {
+        await DataSeeder.SeedIdentities(scope.ServiceProvider, app.Configuration); //Must seed after the roles are created
     }
 }
 

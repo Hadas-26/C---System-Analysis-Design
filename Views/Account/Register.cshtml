@@ -14,12 +14,42 @@
 
     <div class="col-6 offset-4 mt-md-5">
         <div class="row mb-2">
+            <label class="col-form-label">Enter Your First Name</label>
+            <div class="col-md-7">
+                <input asp-for="FirstName" class="form-control" />
+            </div>
+            <div class="col">
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-form-label">Enter Your Last Name</label>
+            <div class="col-md-7">
+                <input asp-for="LastName" class="form-control" />
+            </div>
+            <div class="col">
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2">
             <label class="col-form-label">Create Username</label>
             <div class="col-md-7">
                 <input asp-for="Username" class="form-control" />
             </div>
             <div class="col">
                 <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mb-2">
+            <label class="col-form-label">Enter your Email Address</label>
+            <div class="col-md-7">
+                <input asp-for="Email" class="form-control" />
+            </div>
+            <div class="col">
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
         </div>
 

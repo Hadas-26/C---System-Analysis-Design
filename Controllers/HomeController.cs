@@ -31,6 +31,20 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Applicant")] 
+        [HttpPost]
+        public IActionResult Apply(ApplyModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View(model);
+            }
+        }
+
         [AllowAnonymous]
         public IActionResult LearnMore()
         {

@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MedicaidEmploymentVerificationApplication.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MedicaidEmploymentVerificationApplication.Controllers
 {
+    [AllowAnonymous]
     public class AccountController : Controller
     {
 
@@ -64,7 +66,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 if(result.Succeeded)
                 {
                     await userManager.AddToRoleAsync(user, "Applicant");
-                    //await userManager.AddToRoleAsync(user, "Employee");
+                    //await userManager.AddToRoleAsync(user, "Employee"); // Employees must not be created this way in production
                     await signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }
