@@ -119,10 +119,8 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal?>("VolunteerHours")
@@ -138,7 +136,7 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Applications");
                 });
@@ -154,15 +152,14 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.Property<int>("ApplicantionId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
                     b.Property<byte[]>("Document")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Extension")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -174,7 +171,7 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicantionId");
+                    b.HasIndex("ApplicationId");
 
                     b.ToTable("Documents");
                 });
@@ -460,20 +457,22 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                 {
                     b.HasOne("MedicaidEmploymentVerificationApplication.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.ApplicationDocument", b =>
                 {
-                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.Application", "Applicantion")
+                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.Application", "Application")
                         .WithMany()
-                        .HasForeignKey("ApplicantionId")
+                        .HasForeignKey("ApplicationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Applicantion");
+                    b.Navigation("Application");
                 });
 
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Employee", b =>

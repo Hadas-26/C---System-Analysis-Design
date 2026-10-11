@@ -59,5 +59,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
         public bool PrimaryCaregiverStatus { get; set; }
 
         public List<IFormFile> Documents { get; set; } = new();
+
+        public string UserId { get; set; } = string.Empty;
     }
 }

@@ -119,17 +119,17 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     DisabilityStatus = table.Column<bool>(type: "bit", nullable: false),
                     PregnancyStatus = table.Column<bool>(type: "bit", nullable: false),
                     PrimaryCaregiverStatus = table.Column<bool>(type: "bit", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Applications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Applications_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Applications_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -253,18 +253,18 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Document = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Extension = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Reviewed = table.Column<bool>(type: "bit", nullable: false),
                     Rejected = table.Column<bool>(type: "bit", nullable: false),
-                    ApplicantionId = table.Column<int>(type: "int", nullable: false)
+                    ApplicantionId = table.Column<int>(type: "int", nullable: false),
+                    ApplicationId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Documents", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Documents_Applications_ApplicantionId",
-                        column: x => x.ApplicantionId,
+                        name: "FK_Documents_Applications_ApplicationId",
+                        column: x => x.ApplicationId,
                         principalTable: "Applications",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -282,9 +282,9 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Applications_UserId1",
+                name: "IX_Applications_UserId",
                 table: "Applications",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -326,9 +326,9 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Documents_ApplicantionId",
+                name: "IX_Documents_ApplicationId",
                 table: "Documents",
-                column: "ApplicantionId");
+                column: "ApplicationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employees_EmployeeId",

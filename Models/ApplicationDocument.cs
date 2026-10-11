@@ -9,14 +9,13 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
         [Required]
         public byte[] Document { get; set; } = Array.Empty<byte>();
-        [Required]
-        public string Name { get; set; } = string.Empty;
+        
         [Required]
         public string Extension { get; set; } = string.Empty;
         public bool Reviewed { get; set; }
         public bool Rejected { get; set; }
         [Required]
         public int ApplicantionId { get; set; }
-        public Application Applicantion { get; set; } = null!;
+        public Application Application { get; set; } = null!;
     }
 }
