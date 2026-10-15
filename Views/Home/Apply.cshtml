@@ -1,9 +1,10 @@
-﻿@model ApplyModel
+﻿
+@model ApplyModel
 
 @{
 
     ViewBag.Title = "Apply";
-
+    
 }
 
 
@@ -68,9 +69,22 @@
                 <div class="col">
                     <div class="form-floating">
                         <input type="text" id="State" asp-for="State" class="form-control" required>
+                        <select class="form-select" id="State" asp-for="State" required>
+                            @foreach(var s in MedicaidEmploymentVerificationApplication.Utilities.StaticData.States)
+                            {
+                                <option value="@s.Key">@s.Value</option>
+                            }
+                        </select>
                         <label asp-for="State">State</label>
                     </div>
                 </div>
+
+                @* <div class="col">
+                    <div class="form-floating">
+                        <input type="text" id="State" asp-for="State" class="form-control" required>
+                        <label asp-for="State">State</label>
+                    </div>
+                </div> *@
 
                 <div class="col">
                     <div class="form-floating">
