@@ -1,4 +1,8 @@
-﻿namespace MedicaidEmploymentVerificationApplication.Utilities
+﻿/*
+ * Written by Josh Green
+ */
+
+namespace MedicaidEmploymentVerificationApplication.Utilities
 {
     public static class StaticData
     {

@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿/*
+ * Written by Josh Green
+ */
+
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System.ComponentModel.DataAnnotations;
 
 namespace MedicaidEmploymentVerificationApplication.Models

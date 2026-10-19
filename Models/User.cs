@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿/*
+ * Written by Josh Green
+ */
+
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace MedicaidEmploymentVerificationApplication.Models

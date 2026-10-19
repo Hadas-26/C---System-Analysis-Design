@@ -1,3 +1,7 @@
+/*
+ * Written by Josh Green
+ */
+
 using MedicaidEmploymentVerificationApplication.Models;
 using MedicaidEmploymentVerificationApplication.Utilities;
 using Microsoft.AspNetCore.Authorization;
@@ -57,7 +61,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 {
                     if (!await CreateApplication(model))
                     {
-                        return Challenge();
+                        return Challenge(); //Do not challenge. Instead, create a page that describes the failure to create application, and redirect to Apply
                     }
                     return RedirectToAction("ApplicationSubmitted");
                 }

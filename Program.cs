@@ -1,3 +1,8 @@
+/*
+ * Written by Josh Green
+ * The entry point for the Meva application
+ */
+
 using MedicaidEmploymentVerificationApplication.Models;
 using MedicaidEmploymentVerificationApplication.Utilities;
 using Microsoft.AspNetCore.Identity;
