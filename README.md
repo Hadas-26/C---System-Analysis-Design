@@ -16,14 +16,14 @@ modern GUI elements and responsive design.
 ## How To Use
 
 - Make sure you have Visual Studio or Visual Studio Code installed first
-- Clone the repository on your device 
+- Clone the repository on your device. To clone the repository, go to your terminal, navigate to the folder you want to store the repo in, 
+and enter
 		```
 		git clone https://github.com/Hadas-26/C---System-Analysis-Design
 		```
 - Run the solution with or without debugging
 
-To clone the repository, go to your terminal, navigate to the folder you want to store the repo in, 
-and enter
+
 
 
 
