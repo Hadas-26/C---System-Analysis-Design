@@ -39,7 +39,7 @@
                     {
                         <a asp-action="SeeIfIQualify" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "SeeIfIQualify" ? "active" : "")"><span class="fa fa-question-circle"></span> See If I Qualify</a>
                         <a asp-action="Apply" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "Apply" ? "active" : "")"><span class="fa fa-file-alt"></span> Apply Now</a>
-                        <a href="#" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "ApplicationStatus" ? "active" : "")"><span class="fa fa-file-alt"></span> Application Status</a>
+                        <a asp-action="CheckStatus" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "ApplicationStatus" ? "active" : "")"><span class="fa fa-file-alt"></span> Application Status</a>
                     }
                     else
                     {

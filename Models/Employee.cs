@@ -6,6 +6,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MedicaidEmploymentVerificationApplication.Models
 {
+    /// <summary>
+    /// The Employee class is not being used and instead the base User class is being used in its place
+    /// </summary>
     public class Employee
     {
         public int EmployeeId { get; set; }

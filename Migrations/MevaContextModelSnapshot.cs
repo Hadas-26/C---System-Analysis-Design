@@ -176,6 +176,35 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.ToTable("Documents");
                 });
 
+            modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.ApplicationStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ApplicationId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("DateApproved")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("IsApproved")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("ApplicationStatuses");
+                });
+
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Employee", b =>
                 {
                     b.Property<int>("EmployeeId")
@@ -473,6 +502,23 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                         .IsRequired();
 
                     b.Navigation("Application");
+                });
+
+            modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.ApplicationStatus", b =>
+                {
+                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.Application", "Application")
+                        .WithMany()
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.Navigation("Application");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Employee", b =>

@@ -1,0 +1,16 @@
+﻿@model ApplicationStatus
+
+@{
+    ViewBag.Title = "Application Status";
+}
+
+<h1>This is the Application Status page</h1>
+<p>This page is currently under construction.</p>
+
+@if(Model != null)
+{
+    @if(Model.Application != null)
+    {
+        <p>This application is for @Model.Application.FirstName @Model.Application.LastName</p>
+    }
+}

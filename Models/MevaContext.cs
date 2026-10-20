@@ -16,6 +16,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
         public DbSet<Application> Applications { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<ApplicationDocument> Documents { get; set; } = null!;
+        public DbSet<ApplicationStatus> ApplicationStatuses { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

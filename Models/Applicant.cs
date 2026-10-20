@@ -7,7 +7,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MedicaidEmploymentVerificationApplication.Models
 {
-    
+    /// <summary>
+    /// Applicant is not being used and the base User class is being used in its place
+    /// </summary>
     public class Applicant
     {
         public int Id { get; set; }

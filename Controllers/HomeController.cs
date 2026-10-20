@@ -7,7 +7,10 @@ using MedicaidEmploymentVerificationApplication.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace MedicaidEmploymentVerificationApplication.Controllers
 {
@@ -104,6 +107,14 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             return View();
         }
 
+        public IActionResult CheckStatus()
+        {
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Application? application = context.Applications.Where(a => a.UserId == userId).FirstOrDefault();
+            var status = context.ApplicationStatuses.Include(s => s.Application).Where(a => a.Application.UserId == userId).FirstOrDefault();
+            return View(status);
+        }
+
 
         private async Task<bool> CreateApplication(ApplyModel model)
         {
@@ -157,6 +168,14 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                     context.Documents.Add(doc);
                 }
             }
+
+            ApplicationStatus status = new ApplicationStatus
+            {
+                Application = application,
+            };
+
+            context.ApplicationStatuses.Add(status);
+
             await context.SaveChangesAsync();
             return true;
         }
