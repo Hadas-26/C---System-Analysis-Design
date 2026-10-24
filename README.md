@@ -30,3 +30,5 @@ and enter
 
 > You may need to set certain user secrets for the program to work correctly. 
 If you are having trouble, contact our team.
+
+> Help us improve our design by taking the Monkey Survey at https://www.surveymonkey.com/r/JWWDHY3. 
