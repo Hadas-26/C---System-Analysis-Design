@@ -25,7 +25,9 @@ namespace MedicaidEmploymentVerificationApplication.Models
         /// <summary>
         /// Determines if six months have passed since approval.
         /// </summary>
-        public bool? RefreshNeeded => DateApproved != null ? DateApproved.Value.AddMonths(6) > DateTime.Now : null;
+        public bool? RefreshNeeded => DateApproved != null ? DateApproved.Value.AddMonths(6) > DateTime.Now : null; //Change name to compliance check
+
+        public string Notes { get; set; } = string.Empty;
 
 
     }

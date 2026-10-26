@@ -10,6 +10,22 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddMemoryCache();
+builder.Services.AddSession(option =>
+{
+    if (builder.Environment.IsDevelopment())
+    {
+        option.IdleTimeout = TimeSpan.FromMinutes(120); //longer timeout in development
+    }
+    else
+    {
+        option.IdleTimeout = TimeSpan.FromMinutes(30);
+    }
+
+    option.Cookie.HttpOnly = false;
+    option.Cookie.IsEssential = true;
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -24,21 +40,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<MevaContext>()
     .AddDefaultTokenProviders();
 
-builder.Services.AddMemoryCache();
-builder.Services.AddSession(option =>
-{
-    if(builder.Environment.IsDevelopment())
-    {
-        option.IdleTimeout = TimeSpan.FromMinutes(120); //longer timeout in development
-    }
-    else
-    {
-        option.IdleTimeout = TimeSpan.FromMinutes(30);
-    }
-     
-    option.Cookie.HttpOnly = false;
-    option.Cookie.IsEssential = true;
-});
+
 
 var app = builder.Build();
 

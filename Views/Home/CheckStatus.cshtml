@@ -4,13 +4,53 @@
     ViewBag.Title = "Application Status";
 }
 
-<h1>This is the Application Status page</h1>
-<p>This page is currently under construction.</p>
 
-@if(Model != null)
-{
-    @if(Model.Application != null)
-    {
-        <p>This application is for @Model.Application.FirstName @Model.Application.LastName</p>
-    }
-}
+
+<div class="row">
+    <partial name="SideMenu" />
+
+    <div class="col mt-3 text-center">
+        <h1>This is the Application Status page</h1>
+        <p>This page is currently under construction.</p>
+
+        @if(Model != null)
+        {
+            @if(Model.Application != null)
+            {
+                <p>This application is for @Model.Application.FirstName @Model.Application.LastName</p>
+                <div class="card border-dark mb-3">
+                    <div class="card-header">Application Status</div>
+                    <div class="card-body">
+                        <h5 class="card-title">
+                        </h5>
+                            @if(Model.IsApproved == null)
+                            {
+                                <h5 class="card-title">Your application has not been reviewed yet.</h5>
+
+                                    <p class="card-text">The approval process can take several weeks. 
+                                    If you have questions about the status of your application, please contact us at 1-(888)-888-8888.</p>
+                            }
+                            else if(Model.IsApproved != null && Model.IsApproved == false)
+                            {
+                                <h5 class="card-title">Your application has been denied for the following reasons:</h5>
+
+                                <p class="card-text">@Model.Notes</p>
+                            }
+                            else if(Model.IsApproved != null && Model.IsApproved == true)
+                            {
+                                <h5 class="card-title">Your application has been approved!</h5>
+                                <p class="card-text">You are now a enrolled in Missouri HealthNet.</p>
+                            }
+
+                    </div>
+                </div>
+        
+            }
+            else
+            {
+                <p>Your application was not found. If you have not yet submitted an application, click the Apply tab on the left, and fill out a form. 
+                    If you believe this is an error, please contact us at 1-(888)-888-8888.</p>
+            }
+        }
+    </div>
+</div>

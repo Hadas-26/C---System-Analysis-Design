@@ -110,8 +110,11 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         public IActionResult CheckStatus()
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             Application? application = context.Applications.Where(a => a.UserId == userId).FirstOrDefault();
+
             var status = context.ApplicationStatuses.Include(s => s.Application).Where(a => a.Application.UserId == userId).FirstOrDefault();
+
             return View(status);
         }
 
