@@ -78,8 +78,8 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("EmploymentHours")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Employer")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EmploymentStatus")
                         .IsRequired()
@@ -88,6 +88,9 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("HourlyRate")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -110,6 +113,10 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
 
                     b.Property<bool>("PrimaryCaregiverStatus")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Sex")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
                         .IsRequired()
@@ -149,9 +156,6 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ApplicantionId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
@@ -190,11 +194,18 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.Property<DateTime?>("DateApproved")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateSubmitted")
+                        .HasColumnType("datetime2");
+
                     b.Property<int?>("EmployeeId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

@@ -16,11 +16,12 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
         public int? EmployeeId { get; set; }
 
-        public Employee? Employee { get; set; }
+        public Employee? Employee { get; set; } //Should be changed into a User
 
         public bool? IsApproved { get; set; }
 
         public DateTime? DateApproved { get; set; }
+        public DateTime? DateSubmitted { get; set; }
 
         /// <summary>
         /// Determines if six months have passed since approval.

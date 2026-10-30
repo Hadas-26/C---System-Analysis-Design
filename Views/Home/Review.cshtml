@@ -1,0 +1,243 @@
+﻿<!--Written by Josh Green-->
+
+@model (ApplicationStatus, List<ApplicationDocument>)
+
+
+@{
+    ViewBag.Title = "Review Application";
+}
+
+<div class="row">
+    <partial name="SideMenu" />
+
+    <div class="col mt-3">
+
+        <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
+             <h2>Applicantion Details</h2>
+        </div>
+
+        <div class="list-group">
+
+            <div class="list-group-item">
+                <h5 class="mb-1">Applicant Name and Sex</h5>
+                <p>@Model.Item1.Application.FirstName @(Model.Item1.Application.MiddleInitial != null ? Model.Item1.Application.MiddleInitial : "") @Model.Item1.Application.LastName</p>
+                <p>Sex: @Model.Item1.Application.Sex</p>
+            </div>
+
+            <div class="list-group-item">
+                <h5 class="mb-1">Applicant Address</h5>
+                <p>@($"{Model.Item1.Application.StreetAddress}")</p>
+                <p>@($"{Model.Item1.Application.City}, {Model.Item1.Application.State} {Model.Item1.Application.ZipCode}")</p>
+            </div>
+
+            <div class="list-group-item">
+                <h5 class="mb-1">Applicant Contact Information</h5>
+                <p>Phone: @Model.Item1.Application.PhoneNumber</p>
+                <p>Email: @Model.Item1.Application.EmailAddress</p>
+            </div>
+
+            @{
+                string employment = Model.Item1.Application.EmploymentStatus;
+                string education = Model.Item1.Application.EducationStatus;
+                string volunteer = Model.Item1.Application.VolunteerStatus;
+            }
+
+            <!--Employment Data-->
+
+            @if(employment.ToLower() == "retired" || employment.ToLower() == "unemployed")
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Employment</h5>
+                    <p>Applicant is either retired or otherwise unemployed</p>
+                </div>
+            }
+            else if(employment.ToLower() == "EmployedHalftime".ToLower())
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Employment</h5>
+                    <p>Applicant is employed half-time</p>
+                    <p>Employer Name: @Model.Item1.Application.Employer</p>
+                    <p>Applicant hourly wage is @Model.Item1.Application.HourlyRate?.ToString("c2")</p>
+                </div>
+            }
+            else if(employment.ToLower() == "EmployedFulltime".ToLower())
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Employment</h5>
+                    <p>Applicant is employed full-time</p>
+                    <p>Employer Name: @Model.Item1.Application.Employer</p>
+                    <p>Applicant hourly wage is @Model.Item1.Application.HourlyRate?.ToString("c2")</p>
+                    @if(Model.Item1.Application.HourlyRate != null)
+                    {
+                        <p>A fulltime work week at this salary would approximately gross @((Model.Item1.Application.HourlyRate * 40 * 4)?.ToString("c2"))  per month</p>
+                    }
+                    else
+                    {
+                        <p>Could not calculate monthly income. Hourly rate is missing.</p>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Employment</h5>
+                    <p>Employment info could not be gathered. There may be an error in the application</p>
+                </div>
+            }
+
+            <!--Education Data-->
+
+            @if(education.ToLower() == "notattending")
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Education</h5>
+                    <p>Applicant is not attending an educational institution</p>
+                </div>
+            }
+            else if(education.ToLower() == "parttime")
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Education</h5>
+                    <p>Applicant is attending part-time</p>
+                    <p>Applicant is taking @Model.Item1.Application.EducationHours?.ToString("n1") credit hours this semester.</p>
+                </div>
+            }
+            else if(education.ToLower() == "fulltime")
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Education</h5>
+                    <p>Applicant is attending full-time</p>
+                    <p>Applicant is taking @Model.Item1.Application.EducationHours?.ToString("n1") credit hours this semester.</p>
+                </div>
+            }
+            else
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Employment</h5>
+                    <p>Education info could not be gathered. There may be an error in the application</p>
+                </div>
+            }
+
+
+            <!--Volunteer Data-->
+            @if (volunteer.ToLower() == "active")
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Volunteer Work</h5>
+                    <p>Applicant is actively volunteering</p>
+                    <p>Weekly Volunteer Hours: @Model.Item1.Application.VolunteerHours?.ToString("n0")</p>
+                </div>
+            }
+            else if(volunteer.ToLower() == "inactive")
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Volunteer Work</h5>
+                    <p>Applicant is not currently volunteering at any establishment</p>
+                </div>
+            }
+            else
+            {
+                <div class="list-group-item">
+                    <h5 class="mb-1">Applicant Volunteer Work</h5>
+                    <p>Volunteer info could not be gathered. There may be an error in the application</p>
+                </div>
+            }
+
+            <div class="list-group-item">
+                <h5 class="mb-1">Applicant Marital Status</h5>
+                <p>@Model.Item1.Application.MaritalStatus</p>
+            </div>
+
+            <div class="list-group-item">
+                <h5 class="mb-1">Potential Exemptions</h5>
+                @if(Model.Item1.Application.PregnancyStatus == true)
+                {
+                    <p>The applicant may qualify for a pregnancy exemption. Check for a doctors note, or other valid documented proof.</p>
+                }
+                @if(Model.Item1.Application.DisabilityStatus == true)
+                {
+                    <p>The applicant may qualify for a disability exemption. Check for a doctors note, or other valid documented proof.</p>
+                }
+                @if(Model.Item1.Application.PrimaryCaregiverStatus == true)
+                {
+                    <p>The applicant may qualify for a caregiver exemption. Check for valid documented proof of caregiver status.</p>
+                }
+
+                @if (Model.Item1.Application.PregnancyStatus == false && Model.Item1.Application.DisabilityStatus == false && Model.Item1.Application.PrimaryCaregiverStatus == false)
+                {
+                    <p>The applicant does not qualify for any exemptions according to their application, and in accordance with federal law.</p>
+                }
+            </div>
+
+
+
+
+        </div>
+
+        <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
+            <h2>Associated Documentation</h2>
+        </div>
+
+        @{
+            int docIndex = 1;
+        }
+
+        @if(Model.Item2.Where(d => d.Extension == ".pdf").ToList().Count > 0)
+        {
+
+            
+            <h4 class="mt-2">PDF Documents</h4>
+            <div class="list-group mt-1">
+                @foreach (var d in Model.Item2.Where(d => d.Extension == ".pdf").ToList())
+                {
+                    <div class="list-group-item">
+                        <a asp-action="ViewDocument" asp-route-documentId="@d.Id" target="_blank">Document @docIndex</a>
+                        @if(true)
+                        {
+                            docIndex++;
+                        }
+
+                        <div class="mt-2">
+                            <a href="#" class="btn btn-success">Approve</a>
+                            <a href="#" class="btn btn-danger">Reject</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @{
+            string[] imagesExt = [".png", ".jpeg", ".jpg"];
+        }
+
+        @if (Model.Item2.Where(d => imagesExt.Contains(d.Extension)).ToList().Count > 0)
+        {
+            <h4 class="mt-2">Document Images</h4>
+
+            <div class="row ms-md-2 me-md-2">
+                @foreach (var image in Model.Item2.Where(d => imagesExt.Contains(d.Extension)).ToList())
+                {
+                    <div class="col-4 p-2">
+                        <div class="card" style="box-shadow: 0 0 4px black">
+                            <img src="@Url.Action("ViewDocument", "Home", new { documentId = image.Id })" class="card-img-top" />
+                            <div class="card-body bg-dark text-white rounded m-1">
+                                <h5 class="card-title">Approve this document?</h5>
+                                <p class="card-text">
+                                    Remember, documentation provided must be an acceptable form. 
+                                    Doctor's notes must come from recognized healthcare providers,
+                                    employment information must come from valid employers,
+                                    and volunteer paperwork must come from recognized organizations.
+                                </p>
+
+                                <a href="#" class="btn btn-success">Approve</a>
+                                <a href="#" class="btn btn-danger">Reject</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+        }
+
+    </div>
+</div>

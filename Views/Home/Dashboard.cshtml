@@ -1,6 +1,7 @@
 ﻿<!--Written by Josh Green-->
 <!--This page is for medicaid employee use only and represents the employee dashboard-->
 
+@model DashboardViewModel
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<User> signInManager;
 @inject UserManager<User> userManager;
@@ -24,38 +25,38 @@
 
         <div class="row m-5">
             <div class="col-4">
-                <div class="row text-center align-items-center">
-                    <div class="col-6">
+                <div class="row text-start align-items-center">
+                    <div class="col-3">
                         <i class="fa fa-folder fa-3x"></i>
                     </div>
-                    <div class="col-6">
+                    <div class="col">
                         <div class="row">Total Applicants</div>
-                        <div class="row fw-bold fs-3">24</div>
+                        <div class="row fw-bold fs-3">@Model.ApplicationStatuses.Count</div>
                         <div class="row">Applications recieved</div>
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="row text-center align-items-center">
-                    <div class="col-6">
+                <div class="row text-start align-items-center">
+                    <div class="col-3">
                         <i class="fas fa-hourglass-half fa-3x"></i>
                     </div>
-                    <div class="col-6">
-                        <div class="row">Total Applicants</div>
-                        <div class="row fw-bold fs-3">8</div>
-                        <div class="row">Applications recieved</div>
+                    <div class="col">
+                        <div class="row">Applications Pending Review</div>
+                        <div class="row fw-bold fs-3">@Model.ApplicationStatuses.Where(m => m.IsApproved == null).ToList().Count</div>
+                        <div class="row">Need Verification</div>
                     </div>
                 </div>
             </div>
             <div class="col-4">
-                <div class="row text-center align-items-center">
-                    <div class="col-6">
+                <div class="row text-start align-items-center">
+                    <div class="col-3">
                         <i class="fa fa-file-alt fa-3x"></i>
                     </div>
-                    <div class="col-6">
-                        <div class="row">Total Applicants</div>
-                        <div class="row fw-bold fs-3">15</div>
-                        <div class="row">Applications recieved</div>
+                    <div class="col">
+                        <div class="row">Documents</div>
+                        <div class="row fw-bold fs-3">@Model.ApplicationDocuments.Where(d => d.Reviewed == false).ToList().Count</div>
+                        <div class="row">Awaiting Verification</div>
                     </div>
                 </div>
             </div>
@@ -77,7 +78,7 @@
                         <th scope="col">Application</th>
                         <th scope="col">Applicant</th>
                         <th scope="col">Submitted</th>
-                        <th scope="col">Documents</th>
+                        <th scope="col">Documents Submitted</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -107,9 +108,50 @@
                         <td>Robert Johnson</td>
                         <td>Sep 13, 2026</td>
                         <td>2/3</td>
-                        <td><div class="bg-danger-subtle p-2 rounded text-center text-danger-emphasis fw-semibold">Missing</div></td>
+                        <td><div class="bg-danger-subtle p-2 rounded text-center text-danger-emphasis fw-semibold">Declined</div></td>
                         <td><div class="text-center"><button class="btn btn-primary">Review</button></div></td>
                     </tr>
+
+                    @foreach(var app in Model.ApplicationStatuses)
+                    {   
+                        <tr>
+                            <th scope="row">APP# @app.Application.Id</th>
+                            <td>@app.Application.FirstName @app.Application.LastName</td>
+                            @if (app.DateSubmitted != null)
+                            {
+                                <td>@DateOnly.FromDateTime(app.DateSubmitted ?? DateTime.Now).ToLongDateString()</td>
+                            }
+                            else
+                            {
+                                <td>Not Found</td>
+                            }
+
+                            @{
+                                string status = app.IsApproved switch
+                                {
+                                    null => "Pending",
+                                    true => "Verified",
+                                    false => "Declined"
+                                };
+
+                                string formatting = app.IsApproved switch
+                                {
+                                    null => "bg-warning-subtle text-warning-emphasis",
+                                    true => "bg-success-subtle text-success-emphasis",
+                                    false => "bg-danger-subtle text-danger-emphasis"
+                                };
+
+                                
+                            }
+
+                            <td>@Model.ApplicationDocuments.Where(d => d.ApplicationId == app.ApplicationId).ToList().Count</td>
+
+                            <td><div class="p-2 rounded text-center @formatting fw-semibold">@status</div></td>
+
+                            <td><div class="text-center"><a asp-action="Review" asp-controller="Home" asp-route-applicationStatusId="@app.Id" class="btn btn-primary">Review</a></div></td>
+                        </tr>
+                    }
+                    
                     
                 </tbody>
             </table>

@@ -18,6 +18,9 @@ namespace MedicaidEmploymentVerificationApplication.Models
         public string LastName { get; set; } = string.Empty;
 
         [Required]
+        public string Sex { get; set; } = string.Empty;
+
+        [Required]
         public string StreetAddress { get; set; } = string.Empty;
 
         [Required]
@@ -46,7 +49,9 @@ namespace MedicaidEmploymentVerificationApplication.Models
         [Required]
         public string EmploymentStatus { get; set; } = string.Empty;
 
-        public decimal? EmploymentHours { get; set; }
+        public decimal? HourlyRate { get; set; }
+
+        public string? EmployerName {  get; set; }
 
         [Required]
         public string EducationStatus { get; set; } = string.Empty;

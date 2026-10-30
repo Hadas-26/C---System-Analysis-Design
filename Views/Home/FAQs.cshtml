@@ -4,7 +4,7 @@
 @{
 
     ViewBag.Title = "FAQs";
-
+    int index = 0;
 }
 
 
@@ -20,7 +20,30 @@
 
             <div class="accordion text-start col-8 offset-2" id="faq-accordian">
 
-                <div class="accordion-item">
+                @foreach(var q in StaticData.FAQs)
+                {
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#@index" aria-expanded="true" aria-controls="collapseOne">
+                                @q.Key
+                            </button>
+                        </h2>
+                        <div id="@index" class="accordion-collapse collapse" data-bs-parent="#faq-accordian">
+                            <div class="accordion-body">
+                                @q.Value
+                            </div>
+                        </div>
+                    </div>
+
+                    @if(true)
+                    {
+                        index++;
+                    }
+
+
+                }
+
+                @* <div class="accordion-item">
                     <h2 class="accordion-header">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
                             How do I apply?
@@ -68,7 +91,7 @@
                             Typically no longer than a week, but it may take longer if MEVA experiences higher levels of application submissions than usual.
                         </div>
                     </div>
-                </div>
+                </div> *@
 
             </div>
 

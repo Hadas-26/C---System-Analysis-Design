@@ -19,7 +19,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
         public bool Reviewed { get; set; }
         public bool Rejected { get; set; }
         [Required]
-        public int ApplicantionId { get; set; }
+        public int ApplicationId { get; set; }
         public Application Application { get; set; } = null!;
     }
 }

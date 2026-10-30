@@ -42,7 +42,10 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            return View();
+            var applicationsStatuses = context.ApplicationStatuses.Include(a => a.Application).Include(a => a.Employee).ToList();
+            var documents = context.Documents.Include(d => d.Application).ToList();
+            DashboardViewModel model = new DashboardViewModel { ApplicationDocuments = documents, ApplicationStatuses = applicationsStatuses};
+            return View(model);
         }
 
         //The employee is not allowed to apply from their company account.
@@ -64,7 +67,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 {
                     if (!await CreateApplication(model))
                     {
-                        return Challenge(); //Do not challenge. Instead, create a page that describes the failure to create application, and redirect to Apply
+                        return Content("There was an error creating your application.");
                     }
                     return RedirectToAction("ApplicationSubmitted");
                 }
@@ -107,6 +110,8 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Applicant")]
+        [HttpGet]
         public IActionResult CheckStatus()
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -116,6 +121,53 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             var status = context.ApplicationStatuses.Include(s => s.Application).Where(a => a.Application.UserId == userId).FirstOrDefault();
 
             return View(status);
+        }
+
+        [Authorize(Roles = "Employee")]
+        [HttpGet]
+        public IActionResult Review(int applicationStatusId)
+        {
+            if(applicationStatusId == 0)
+            {
+                return Content("The application Status with that ID could not be found");
+            }
+
+            var model = context.ApplicationStatuses.Include(s => s.Application).Include(s => s.Employee).FirstOrDefault(s => s.Id == applicationStatusId);
+            if(model == null || model.Application == null)
+            {
+                return Content("The application could not be found");
+            }
+
+            List<ApplicationDocument> docs = context.Documents.Include(d => d.Application).Where(d => d.ApplicationId == model.ApplicationId).ToList();
+            return View((model, docs));
+        }
+
+        [Authorize(Roles = "Employee")]
+        [HttpGet]
+        public IActionResult ViewDocument(int documentId)
+        {
+            var doc = context.Documents.Find(documentId);
+
+            
+
+            if(doc == null)
+            {
+                return Content("Could not open document.");
+            }
+
+            string? ext = doc.Extension.ToLowerInvariant() switch
+            {
+                ".pdf" => "application/pdf",
+                ".jpeg" or ".jpg" => "image/jpeg",
+                ".png" => "image/png",
+                _ => null
+            };
+
+            if (ext == null)
+            {
+                return Content("Unsupported file format.");
+            }
+            return File(doc.Document, ext);
         }
 
 
@@ -133,6 +185,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 FirstName = model.FirstName,
                 MiddleInitial = model.MiddleInitial,
                 LastName = model.LastName,
+                Sex = model.Sex,
                 City = model.City,
                 State = model.State,
                 StreetAddress = model.StreetAddress,
@@ -142,7 +195,8 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 EducationStatus = model.EducationStatus,
                 EducationHours = model.EducationHours,
                 EmploymentStatus = model.EmploymentStatus,
-                EmploymentHours = model.EmploymentHours,
+                HourlyRate = model.HourlyRate,
+                Employer = model.EmployerName,
                 VolunteerStatus = model.VolunteerStatus,
                 VolunteerHours = model.VolunteerHours,
                 MaritalStatus = model.MaritalStatus,
@@ -175,6 +229,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             ApplicationStatus status = new ApplicationStatus
             {
                 Application = application,
+                DateSubmitted = DateTime.Now
             };
 
             context.ApplicationStatuses.Add(status);
