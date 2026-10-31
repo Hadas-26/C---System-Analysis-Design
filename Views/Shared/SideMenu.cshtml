@@ -24,7 +24,7 @@
             <div class="list-group">
                 <a asp-action="Index" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "Index" ? "active" : "")"><span class="fa fa-home"></span> Home</a>
                 <a asp-action="LearnMore" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "LearnMore" ? "active" : "")"><span class="fa fa-bar-chart"></span> Learn About H.R. 1</a>
-                <a asp-action="FAQs" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "FAQs" ? "active" : "")"><span class="fa fa-bar-chart"></span> FAQs</a>
+                <a asp-action="FAQs" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "FAQs" ? "active" : "")"><span class="fas fa-info-circle"></span> FAQs</a>
 
                     
                 @if (signInManager.IsSignedIn(User))
@@ -39,7 +39,7 @@
                     {
                         <a asp-action="SeeIfIQualify" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "SeeIfIQualify" ? "active" : "")"><span class="fa fa-question-circle"></span> See If I Qualify</a>
                         <a asp-action="Apply" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "Apply" ? "active" : "")"><span class="fa fa-file-alt"></span> Apply Now</a>
-                        <a asp-action="CheckStatus" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "ApplicationStatus" ? "active" : "")"><span class="fa fa-file-alt"></span> Application Status</a>
+                        <a asp-action="CheckStatus" class="list-group-item list-group-item-action list-group-item-primary @(controller == "Home" && action == "ApplicationStatus" ? "active" : "")"><span class="fas fa-user-check"></span> Application Status</a>
                     }
                     else
                     {

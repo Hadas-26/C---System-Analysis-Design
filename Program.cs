@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddMemoryCache();
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(option =>
 {
     if (builder.Environment.IsDevelopment())
@@ -22,14 +22,17 @@ builder.Services.AddSession(option =>
         option.IdleTimeout = TimeSpan.FromMinutes(30);
     }
 
-    option.Cookie.HttpOnly = false;
+    option.Cookie.HttpOnly = true;
     option.Cookie.IsEssential = true;
 });
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<MevaContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MevaContext")));
+builder.Services.AddDbContext<MevaContext>(options => 
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MevaContext"),
+    sqlOptions => sqlOptions.EnableRetryOnFailure()
+));
 
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
@@ -71,6 +74,10 @@ using (var scope = app.Services.CreateScope())
     if (app.Environment.IsDevelopment())
     {
         await DataSeeder.SeedIdentities(scope.ServiceProvider, app.Configuration); //Must seed after the roles are created
+    }
+    else
+    {
+        await DataSeeder.SeedIdentities(scope.ServiceProvider, app.Configuration);
     }
 }
 

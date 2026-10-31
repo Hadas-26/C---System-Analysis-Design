@@ -84,34 +84,6 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!--This will be handled with a loop to query applications-->
-                    <tr>
-                        <th scope="row">MED 1001</th>
-                        <td>John Smith</td>
-                        <td>Sep 10, 2026</td>
-                        <td>3/3</td>
-                        <td><div class="bg-warning-subtle p-2 rounded text-center text-warning-emphasis fw-semibold">Pending</div></td>
-                        <td><div class="text-center"><button class="btn btn-primary">Review</button></div></td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">MED 1002</th>
-                        <td>Jane Doe</td>
-                        <td>Sep 12, 2026</td>
-                        <td>3/3</td>
-                        <td><div class="bg-success-subtle p-2 rounded text-center text-success-emphasis fw-semibold">Verified</div></td>
-                        <td><div class="text-center"><button class="btn btn-primary">View</button></div></td>
-                    </tr>
-
-                    <tr>
-                        <th scope="row">MED 1003</th>
-                        <td>Robert Johnson</td>
-                        <td>Sep 13, 2026</td>
-                        <td>2/3</td>
-                        <td><div class="bg-danger-subtle p-2 rounded text-center text-danger-emphasis fw-semibold">Declined</div></td>
-                        <td><div class="text-center"><button class="btn btn-primary">Review</button></div></td>
-                    </tr>
-
                     @foreach(var app in Model.ApplicationStatuses)
                     {   
                         <tr>
