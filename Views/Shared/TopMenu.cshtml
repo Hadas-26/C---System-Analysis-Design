@@ -1,0 +1,40 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@inject SignInManager<User> signInManager;
+@inject UserManager<User> userManager;
+
+@{
+
+    string controller = ViewContext.RouteData.Values["Controller"]?.ToString() ?? "";
+    string action = ViewContext.RouteData.Values["Action"]?.ToString() ?? "";
+}
+
+
+<ul class="navbar-nav me-auto d-sm-none">
+
+    <li class="nav-item">
+        <a asp-action="Index" class="nav-link @(controller == "Home" && action == "Index" ? "active" : "")">Home</a>
+    </li>
+    <li class="nav-item">
+        <a asp-action="FAQs" class="nav-link @(action == "FAQs" ? "active" : "")">FAQs</a>
+    </li>
+
+    @if (signInManager.IsSignedIn(User))
+    {
+        @if (User.IsInRole("Employee"))
+        {
+            <li class="nav-item">
+                <a asp-action="Dashboard" class="nav-link @(action == "Dahsboard" ? "active" : "")">Employee Dashboard</a>
+            </li>
+        }
+        else if (User.IsInRole("Applicant"))
+        {
+            <li class="nav-item">
+                <a asp-action="Apply" class="nav-link @(action == "Apply" ? "active" : "")">Apply Now</a>
+            </li>
+            <li class="nav-item">
+                <a asp-action="CheckStatus" class="nav-link @(action == "ApplicationStatus" ? "active" : "")">Application Status</a>
+            </li>
+        }
+    }
+
+</ul>

@@ -217,7 +217,7 @@
             <div class="row ms-md-2 me-md-2">
                 @foreach (var image in Model.Item2.Where(d => imagesExt.Contains(d.Extension)).ToList())
                 {
-                    <div class="col-4 p-2">
+                    <div class="col-md-4 p-2">
                         <div class="card" style="box-shadow: 0 0 4px black">
                             <img src="@Url.Action("ViewDocument", "Home", new { documentId = image.Id })" class="card-img-top" />
                             <div class="card-body bg-dark text-white rounded m-1">
