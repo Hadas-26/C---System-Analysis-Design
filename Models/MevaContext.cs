@@ -24,12 +24,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
             base.OnModelCreating(modelBuilder);
 
             //Apply configurations here
-            modelBuilder.Entity<Applicant>().HasIndex(a => a.Id).IsUnique();
-            modelBuilder.Entity<Employee>().HasIndex(e => e.EmployeeId).IsUnique();
 
-            //modelBuilder.Entity<Employee>().HasData(
-            //    new Employee { }
-            //    )
 
             //Add any default data here
         }

@@ -3,6 +3,7 @@
  */
 
 using System.ComponentModel.DataAnnotations;
+using MedicaidEmploymentVerificationApplication.CustomAttributes;
 
 namespace MedicaidEmploymentVerificationApplication.Models
 {
@@ -27,6 +28,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
         public string City { get; set; } = string.Empty;
 
         [Required]
+        [RequiredString(["Missouri","MO"], ErrorMessage = "State must be Missouri (MO).")]
         public string State { get; set; } = string.Empty;
 
         [Required]
