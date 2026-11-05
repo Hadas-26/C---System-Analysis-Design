@@ -71,7 +71,16 @@ namespace MedicaidEmploymentVerificationApplication.Utilities
 
             {"Are my login credentials protected?","MEVA encrypts user credentials using SHA256 hashing and salting to ensure the highest level  of protection." },
 
-            {"How long does the application reviewing process take?","Typically no longer than a few weeks, but it may take longer if MEVA experiences higher levels of application submissions than usual." }
+            {"How long does the application reviewing process take?","Typically no longer than a few weeks, but it may take longer if MEVA experiences higher levels of application submissions than usual." },
+            {"What is this application used for?","This application provides a way to submit employment, education, and volunteer information, along with supporting documents, for review." },
+            {"Is this an official Medicaid website?","No. This is a student project created for demonstration and usability testing. Submitting information here does not apply for Medicaid, renew coverage, or report information to a government agency." },
+            {"Should I enter my real personal information?","While this app doesn't stop you from using real information, it is recommended to use fictitious details rather than personal information" },
+            {"Why do I need to create an account?","An account lets us connect you as an individual with the application you submit. By creating an account, we are able to send you updates and other information having to do with your application's status." },
+            {"Do I need to be employed to qualify?","There are several ways to qualify even without being employed. The required minimum work hours can be met through volunteer work, credit hours, employment hours, or some combination of the three. There are also exemptions you may potentially qualify for to get coverage." },
+            {"How can I be sure my application went through?","If your application is in our system, it will be reflected in the 'Application Status' page, accessible through the navigation menu." },
+            {"What file formats are accepted for documentation?","Currently we accept PDF, PNG, and JPG file formats. These are the most commonly used formats." },
+            {"Is this website mobile friendly?","Yes! The Meva application supports mobile browsing in addition to desktop and laptop browsing." }
+            //{"","" },
         };
 
         public static List<string> Sexes = new List<string> { "Male", "Female" };
