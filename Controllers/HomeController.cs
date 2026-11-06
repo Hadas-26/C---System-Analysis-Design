@@ -125,6 +125,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
 
         [Authorize(Roles = "Employee")]
         [HttpGet]
+        [Route("[Controller]/Review/APP_{applicationStatusId}")]
         public IActionResult Review(int applicationStatusId)
         {
             if(applicationStatusId == 0)

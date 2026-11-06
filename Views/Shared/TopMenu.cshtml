@@ -11,10 +11,10 @@
 
 <ul class="navbar-nav me-auto d-sm-none">
 
-    <li class="nav-item">
+    <li class="nav-item pt-1 pb-1">
         <a asp-action="Index" class="nav-link @(controller == "Home" && action == "Index" ? "active" : "")">Home</a>
     </li>
-    <li class="nav-item">
+    <li class="nav-item pt-1 pb-1">
         <a asp-action="FAQs" class="nav-link @(action == "FAQs" ? "active" : "")">FAQs</a>
     </li>
 
@@ -22,16 +22,16 @@
     {
         @if (User.IsInRole("Employee"))
         {
-            <li class="nav-item">
+            <li class="nav-item pt-1 pb-1">
                 <a asp-action="Dashboard" class="nav-link @(action == "Dahsboard" ? "active" : "")">Employee Dashboard</a>
             </li>
         }
         else if (User.IsInRole("Applicant"))
         {
-            <li class="nav-item">
+            <li class="nav-item pt-1 pb-1">
                 <a asp-action="Apply" class="nav-link @(action == "Apply" ? "active" : "")">Apply Now</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item pt-1 pb-1">
                 <a asp-action="CheckStatus" class="nav-link @(action == "ApplicationStatus" ? "active" : "")">Application Status</a>
             </li>
         }

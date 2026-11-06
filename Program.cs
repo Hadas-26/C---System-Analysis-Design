@@ -43,7 +43,11 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     .AddEntityFrameworkStores<MevaContext>()
     .AddDefaultTokenProviders();
 
-
+builder.Services.AddRouting(op =>
+{
+    op.AppendTrailingSlash = true;
+    op.LowercaseUrls = true;
+});
 
 var app = builder.Build();
 

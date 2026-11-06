@@ -65,7 +65,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         {
             if(ModelState.IsValid)
             {
-                var user = new User { UserName = model.Username };
+                var user = new User { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
                 var result = await userManager.CreateAsync(user, model.Password);
                 if(result.Succeeded)
                 {

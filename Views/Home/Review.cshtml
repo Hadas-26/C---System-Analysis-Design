@@ -248,8 +248,83 @@
             If the application is improperly filled out, or needed support documentation is missing or otherwise not useable, you must reject the application.
         </p>
 
-        <a href="#" class="btn btn-success">Approve This Application</a>
-        <a href="#" class="btn btn-danger">Reject This Application</a>
+        <div class="d-flex gap-2 flex-wrap">
+            <form>
+                <button type="submit" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">Approve This Application</button>
+            </form>
+            <form>
+                <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">Reject This Application</button>
+            </form>
+            <form>
+                <button type="submit" class="btn btn-warning data-bs-toggle="modal" data-bs-target="#pendingModal">Further Documentation Needed</button>
+            </form>
 
+            <a asp-action="Dashboard" class="btn btn-outline-primary ms-auto">Back To Dashboard</a>
+        </div>
+
+        
+        
+        
+
+        
+
+
+
+<!-- Approve Modal -->
+<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Approving this document means that you have confirmed the authenticity of any documentation and the applicant is eligible for Medicaid and will begin recieving coverage.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Approve?</button>
+      </div>
     </div>
+  </div>
+</div>
+
+<!-- Reject Modal -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Rejecting this application means that the applicant is ineligible for Medicaid coverage.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Reject?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pending Modal -->
+<div class="modal fade" id="pendingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        This action will put the application into a pending status and notify the applicant that something more is needed to verify their eligibility.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary">Approve?</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
