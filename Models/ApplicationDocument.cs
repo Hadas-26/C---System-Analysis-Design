@@ -21,5 +21,10 @@ namespace MedicaidEmploymentVerificationApplication.Models
         [Required]
         public int ApplicationId { get; set; }
         public Application Application { get; set; } = null!;
+
+        public string? EmployeeId { get; set; }
+        public User Employee { get; set; } = null!;
+
+        public DateTime? DateApproved { get; set; }
     }
 }

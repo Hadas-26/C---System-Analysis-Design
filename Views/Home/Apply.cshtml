@@ -85,7 +85,7 @@
                         <select class="form-select" id="State" asp-for="State" required>
                             @foreach(var s in MedicaidEmploymentVerificationApplication.Utilities.StaticData.States)
                             {
-                                <option value="@s.Key">@s.Value</option>
+                                <option value="@s.Key" selected="@(s.Value.ToLower() == "mo")">@s.Value</option>
                             }
                         </select>
                         <label asp-for="State">State</label>
@@ -285,4 +285,5 @@
 @section Scripts {
     <script src="~/js/apply.js" asp-append-version="true"></script>
     <script src="~/js/apply-required-docs.js" asp-append-version="true"></script>
+	<partial name="_ValidationScriptsPartial" />
 }

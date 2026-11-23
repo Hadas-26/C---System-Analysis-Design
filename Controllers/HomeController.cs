@@ -52,9 +52,24 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         //They must apply under a personal account and they must not review their own application
         [Authorize(Roles = "Applicant")] 
         [HttpGet]
-        public IActionResult Apply()
+        public async Task<IActionResult> ApplyAsync()
         {
-            return View();
+            var user = await userManager.GetUserAsync(User);
+
+            if(user == null)
+            {
+                return View();
+            }
+
+            var applyModel = new ApplyModel
+            {
+                FirstName = user.FirstName ?? string.Empty,
+                LastName = user.LastName ?? string.Empty,
+                EmailAddress = user.Email ?? string.Empty
+            };
+
+
+            return View(applyModel);
         }
 
         [Authorize(Roles = "Applicant")] 
@@ -171,6 +186,45 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             return File(doc.Document, ext);
         }
 
+        [Authorize(Roles = "Employee")]
+        [HttpPost]
+        public async Task<IActionResult> DocumentDecisionAsync(DocumentDecisionModel model)
+        {
+            
+            var document = context.Documents.FirstOrDefault(d => d.Id == model.DocumentId);
+
+            if(document == null)
+            {
+                return Content("The document could not be found.");
+            }
+
+            document.Reviewed = true;
+            document.Rejected = !model.Approved;
+            document.EmployeeId = userManager.GetUserId(User);
+            document.DateApproved = model.Approved ? DateTime.Now : null;
+
+            await context.SaveChangesAsync();
+
+            return RedirectToAction("Review", new { applicationStatusId = model.StatusId });
+        }
+
+        [Authorize(Roles = "Employee")]
+        [HttpPost]
+        public async Task<IActionResult> ApplicationDecisionAsync(int statusId, bool approved)
+        {
+            var status = context.ApplicationStatuses.Include(s => s.Application).FirstOrDefault(s => s.Id == statusId);
+            if(status == null)
+            {
+                return Content("The application status could not be found.");
+            }
+
+            status.IsApproved = approved;
+            status.EmployeeId = userManager.GetUserId(User);
+            status.DateApproved = DateTime.Now;
+            await context.SaveChangesAsync();
+
+            return RedirectToAction("Dashboard", status.Id); //Confirmation page should be added
+        }
 
         private async Task<bool> CreateApplication(ApplyModel model)
         {
@@ -209,22 +263,11 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
 
             context.Applications.Add(application);
 
+            var documents = model.Documents?.Where(d => d != null && d.Length > 0).ToList();
 
-            if (model.Documents != null && model.Documents.Count > 0)
+            if(documents != null && documents.Count > 0)
             {
-                foreach (var document in model.Documents)
-                {
-                    if (document == null || document.Length == 0)
-                        continue;
-
-                    ApplicationDocument doc = new ApplicationDocument
-                    {
-                        Document = await DocumentToByteConverter.Convert(document),
-                        Application = application,
-                        Extension = Path.GetExtension(document.FileName).ToLowerInvariant()
-                    };
-                    context.Documents.Add(doc);
-                }
+                SaveDocuments(documents, application, false);
             }
 
             ApplicationStatus status = new ApplicationStatus
@@ -237,6 +280,27 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
 
             await context.SaveChangesAsync();
             return true;
+        }
+
+        private void SaveDocuments(List<IFormFile> documents, Application application, bool saveDocs = true)
+        {
+            foreach (var document in documents)
+            {
+                if (document == null || document.Length == 0)
+                    continue;
+                ApplicationDocument doc = new ApplicationDocument
+                {
+                    Document = DocumentToByteConverter.Convert(document).Result,
+                    Application = application,
+                    Extension = Path.GetExtension(document.FileName).ToLowerInvariant()
+                };
+                context.Documents.Add(doc);
+            }
+
+            if(saveDocs)
+            {
+                context.SaveChanges();
+            }   
         }
         
     }

@@ -12,9 +12,9 @@ namespace MedicaidEmploymentVerificationApplication.Models
         public MevaContext(DbContextOptions<MevaContext> options) : base(options) { }
 
         //Add all needed databases here
-        public DbSet<Applicant> Applicants { get; set; } = null!;
+        //public DbSet<Applicant> Applicants { get; set; } = null!;
         public DbSet<Application> Applications { get; set; } = null!;
-        public DbSet<Employee> Employees { get; set; } = null!;
+        //public DbSet<Employee> Employees { get; set; } = null!;
         public DbSet<ApplicationDocument> Documents { get; set; } = null!;
         public DbSet<ApplicationStatus> ApplicationStatuses { get; set; } = null!;
 

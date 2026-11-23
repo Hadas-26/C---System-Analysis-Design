@@ -176,6 +176,12 @@
 
         <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
             <h2>Associated Documentation</h2>
+            <p>
+                Remember, documentation provided must be an acceptable form.
+                Doctor's notes must come from recognized healthcare providers,
+                employment information must come from valid employers,
+                and volunteer paperwork must come from recognized organizations.
+            </p>
         </div>
 
         @{
@@ -198,8 +204,42 @@
                         }
 
                         <div class="mt-2">
-                            <a href="#" class="btn btn-success">Approve</a>
-                            <a href="#" class="btn btn-danger">Reject</a>
+                            <div class="d-flex gap-2 align-items-center">
+                                <form method="post" asp-action="DocumentDecision">
+
+                                    <input name="ApplicationId" value="@Model.Item1.ApplicationId" type="hidden" />
+                                    <input name="StatusId" value="@Model.Item1.Id" type="hidden" />
+                                    <input name="DocumentId" value="@d.Id" type="hidden" />
+                                    <input name="Approved" value="true" type="hidden" />
+
+                                    <button type="submit" class="btn btn-success">Approve</button>
+                                </form>
+
+                                <form method="post" asp-action="DocumentDecision">
+                                    <input name="ApplicationId" value="@Model.Item1.ApplicationId" type="hidden" />
+                                    <input name="StatusId" value="@Model.Item1.Id" type="hidden" />
+                                    <input name="DocumentId" value="@d.Id" type="hidden" />
+                                    <input name="Approved" value="false" type="hidden" />
+
+                                    <button type="submit" class="btn btn-danger">Reject</button>
+                                </form>
+
+                                @if (!d.Reviewed)
+                                {
+                                    <i class="bi bi-clock-fill ms-auto text-warning"></i>
+                                }
+                                else if (d.Rejected == true)
+                                {
+                                    <i class="bi bi-x-circle-fill ms-auto text-danger"></i>
+                                }
+                                else
+                                {
+                                    <i class="bi bi-check-circle-fill ms-auto text-success"></i>
+                                }
+                                
+                                
+                                
+                            </div>
                         </div>
                     </div>
                 }
@@ -222,15 +262,42 @@
                             <img src="@Url.Action("ViewDocument", "Home", new { documentId = image.Id })" class="card-img-top" />
                             <div class="card-body bg-dark text-white rounded m-1">
                                 <h5 class="card-title">Approve this document?</h5>
-                                <p class="card-text">
-                                    Remember, documentation provided must be an acceptable form. 
-                                    Doctor's notes must come from recognized healthcare providers,
-                                    employment information must come from valid employers,
-                                    and volunteer paperwork must come from recognized organizations.
-                                </p>
 
-                                <a href="#" class="btn btn-success">Approve</a>
-                                <a href="#" class="btn btn-danger">Reject</a>
+                                <div class="d-flex gap-2 align-items-center">
+                                    <form method="post" asp-action="DocumentDecision">
+                                        <input name="ApplicationId" value="@Model.Item1.ApplicationId" type="hidden" />
+                                        <input name="StatusId" value="@Model.Item1.Id" type="hidden" />
+                                        <input name="DocumentId" value="@image.Id" type="hidden" />
+                                        <input name="Approved" value="true" type="hidden" />
+
+                                        <button type="submit" class="btn btn-success">Approve</button>
+                                    </form>
+
+                                    <form method="post" asp-action="DocumentDecision">
+                                        <input name="ApplicationId" value="@Model.Item1.ApplicationId" type="hidden" />
+                                        <input name="StatusId" value="@Model.Item1.Id" type="hidden" />
+                                        <input name="DocumentId" value="@image.Id" type="hidden" />
+                                        <input name="Approved" value="false" type="hidden" />
+
+                                        <button type="submit" class="btn btn-danger">Reject</button>
+                                    </form>
+                                    
+                                    
+
+                                    @if (!image.Reviewed)
+                                    {
+                                        <i class="bi bi-clock-fill ms-auto text-warning"></i>
+                                    }
+                                    else if (image.Rejected == true)
+                                    {
+                                        <i class="bi bi-x-circle-fill ms-auto text-danger"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-check-circle-fill ms-auto text-success"></i>
+                                    }
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -256,7 +323,7 @@
                 <button type="submit" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">Reject This Application</button>
             </form>
             <form>
-                <button type="submit" class="btn btn-warning data-bs-toggle="modal" data-bs-target="#pendingModal">Further Documentation Needed</button>
+                <button type="submit" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#pendingModal">Further Documentation Needed</button>
             </form>
 
             <a asp-action="Dashboard" class="btn btn-outline-primary ms-auto">Back To Dashboard</a>

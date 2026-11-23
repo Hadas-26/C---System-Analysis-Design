@@ -14,9 +14,9 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
         public Application Application { get; set; } = null!;
 
-        public int? EmployeeId { get; set; }
+        public string? EmployeeId { get; set; }
 
-        public Employee? Employee { get; set; } //Should be changed into a User
+        public User? Employee { get; set; } = null!;
 
         public bool? IsApproved { get; set; }
 

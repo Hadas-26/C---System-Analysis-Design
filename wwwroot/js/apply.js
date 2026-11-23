@@ -11,6 +11,13 @@
     const VolunteerStatus = document.getElementById('VolunteerStatus');
     const VolunteerHoursField = document.getElementById('VolunteerHoursField');
 
+    if (VolunteerStatus.value === 'Active') {
+        VolunteerHoursField.classList.remove('d-none');
+    }
+    else {
+        VolunteerHoursField.classList.add('d-none');
+    }
+
     VolunteerStatus.addEventListener('change', function () {
 
         if (VolunteerStatus.value === 'Active') {
@@ -31,6 +38,13 @@
     const EmploymentStatus = document.getElementById('EmploymentStatus');
     const EmploymentField = document.getElementById('EmploymentField');
 
+    if (EmploymentStatus.value === 'EmployedHalftime' || EmploymentStatus.value === 'EmployedFulltime') {
+        EmploymentField.classList.remove('d-none');
+    }
+    else {
+        EmploymentField.classList.add('d-none');
+    }
+
     EmploymentStatus.addEventListener('change', function () {
 
         if (EmploymentStatus.value === 'EmployedHalftime' || EmploymentStatus.value === 'EmployedFulltime') {
@@ -49,6 +63,13 @@
 
     const EducationStatus = document.getElementById('EducationStatus');
     const EducationField = document.getElementById('EducationField');
+
+    if (EducationStatus.value === 'FullTime' || EducationStatus.value === 'PartTime') {
+        EducationField.classList.remove('d-none');
+    }
+    else {
+        EducationField.classList.add('d-none');
+    }
 
     EducationStatus.addEventListener('change', function () {
 

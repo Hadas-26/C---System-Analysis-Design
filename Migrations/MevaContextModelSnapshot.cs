@@ -22,36 +22,6 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Applicant", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Id")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Applicants");
-                });
-
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Application", b =>
                 {
                     b.Property<int>("Id")
@@ -159,9 +129,15 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.Property<int>("ApplicationId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime?>("DateApproved")
+                        .HasColumnType("datetime2");
+
                     b.Property<byte[]>("Document")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Extension")
                         .IsRequired()
@@ -176,6 +152,8 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.ToTable("Documents");
                 });
@@ -197,8 +175,8 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.Property<DateTime?>("DateSubmitted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("EmployeeId")
-                        .HasColumnType("int");
+                    b.Property<string>("EmployeeId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool?>("IsApproved")
                         .HasColumnType("bit");
@@ -214,66 +192,6 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("ApplicationStatuses");
-                });
-
-            modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Employee", b =>
-                {
-                    b.Property<int>("EmployeeId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeId"));
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EmailAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EmployeeNumber")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("HireDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("EmployeeId");
-
-                    b.HasIndex("EmployeeId")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Employees");
                 });
 
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.User", b =>
@@ -482,17 +400,6 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Applicant", b =>
-                {
-                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Application", b =>
                 {
                     b.HasOne("MedicaidEmploymentVerificationApplication.Models.User", "User")
@@ -512,7 +419,13 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.User", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
                     b.Navigation("Application");
+
+                    b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.ApplicationStatus", b =>
@@ -523,24 +436,13 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.Employee", "Employee")
+                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.User", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
                     b.Navigation("Application");
 
                     b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("MedicaidEmploymentVerificationApplication.Models.Employee", b =>
-                {
-                    b.HasOne("MedicaidEmploymentVerificationApplication.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

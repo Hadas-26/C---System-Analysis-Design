@@ -82,7 +82,7 @@
                         <th scope="col">Application</th>
                         <th scope="col">Applicant</th>
                         <th scope="col">Submitted</th>
-                        <th scope="col">Documents Submitted</th>
+                        <th scope="col">Documents Reviewed</th>
                         <th scope="col">Status</th>
                         <th scope="col">Action</th>
                     </tr>
@@ -120,7 +120,7 @@
                                 
                             }
 
-                            <td>@Model.ApplicationDocuments.Where(d => d.ApplicationId == app.ApplicationId).ToList().Count</td>
+                            <td>@Model.ApplicationDocuments.Where(d => d.ApplicationId == app.ApplicationId && d.Reviewed == true).Count() of @Model.ApplicationDocuments.Where(d => d.ApplicationId == app.ApplicationId).Count()</td>
 
                             <td><div class="p-2 rounded text-center @formatting fw-semibold">@status</div></td>
 
