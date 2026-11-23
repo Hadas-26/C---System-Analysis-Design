@@ -125,6 +125,9 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
 
             var status = context.ApplicationStatuses.Include(s => s.Application).Where(a => a.Application.UserId == userId).FirstOrDefault();
 
+            status?.Seen = true;
+            context.SaveChanges();
+         
             return View(status);
         }
 

@@ -185,6 +185,9 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Seen")
+                        .HasColumnType("bit");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationId");

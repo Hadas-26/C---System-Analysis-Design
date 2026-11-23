@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="../MedicaidEmploymentVerificationApplication.Tests/MedicaidEmploymentVerificationApplication.Tests.csproj" Id="642338d9-71ea-4330-ace2-21729fbdf371" />
   <Project Path="MedicaidEmploymentVerificationApplication.csproj" />
 </Solution>

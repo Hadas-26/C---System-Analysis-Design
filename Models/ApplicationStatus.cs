@@ -30,6 +30,8 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
         public string Notes { get; set; } = string.Empty;
 
+        public bool Seen { get; set; } = true;
+
 
     }
 }

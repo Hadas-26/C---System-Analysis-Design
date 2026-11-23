@@ -95,6 +95,13 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             document.EmployeeId = userManager.GetUserId(User);
             document.DateApproved = model.Approved ? DateTime.Now : null;
 
+            var status = context.ApplicationStatuses.Find(model.StatusId);
+
+            if(status != null)
+            {
+                status.Seen = false;
+            }
+
             await context.SaveChangesAsync();
 
             return RedirectToAction("Review", "Employee", new { applicationStatusId = model.StatusId });
@@ -159,6 +166,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             status.IsApproved = approved;
             status.EmployeeId = userManager.GetUserId(User);
             status.DateApproved = DateTime.Now;
+            status.Seen = false;
 
             if(approved != null && approved == true)
             {
