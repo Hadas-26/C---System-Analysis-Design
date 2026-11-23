@@ -23,7 +23,7 @@
         @if (User.IsInRole("Employee"))
         {
             <li class="nav-item pt-1 pb-1">
-                <a asp-action="Dashboard" class="nav-link @(action == "Dahsboard" ? "active" : "")">Employee Dashboard</a>
+                <a asp-controller="Employee" asp-action="Dashboard" class="nav-link @(controller == "Employee" && action == "Dahsboard" ? "active" : "")">Employee Dashboard</a>
             </li>
         }
         else if (User.IsInRole("Applicant"))

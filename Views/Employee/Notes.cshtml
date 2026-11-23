@@ -1,0 +1,40 @@
+﻿@*
+    Written by Josh
+    The notes section is where an Employee can specify any problems with the application
+*@
+
+@model NotesViewModel
+
+@{
+    ViewBag.Title = "Notes";
+}
+
+<div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
+    <h2>Notes</h2>
+    <p>
+        These notes will be seen by the applicant, and should include any actionable steps to resolve any issues with the application.
+        <br />
+        If there are no actions to be taken, briefly explain the reason for the rejection of the application 
+        (e.g. qualifying hours do not meet Medicaid standards).
+    </p>
+</div>
+
+<div class="m-3">
+    <form method="post" asp-action="Notes" asp-controller="Employee">
+        <input asp-for="IsRejected" type="hidden" />
+        <input asp-for="StatusId" type="hidden" />
+        <div class="row mt-2">
+            <div class="col">
+                <label asp-for="Notes" class="form-label">Notes for Applicant</label>
+                <textarea asp-for="Notes" class="form-control" style="resize: none"></textarea>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col">
+                <button type="submit" class="btn btn-primary">Submit</button>
+                <a asp-controller="Employee" asp-action="Review" asp-route-applicationStatusId="@Model.StatusId" class="btn btn-outline-primary">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
