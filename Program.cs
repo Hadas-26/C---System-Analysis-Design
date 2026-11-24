@@ -4,6 +4,7 @@
  */
 
 using MedicaidEmploymentVerificationApplication.Models;
+using MedicaidEmploymentVerificationApplication.Models.DataLayer;
 using MedicaidEmploymentVerificationApplication.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,8 @@ builder.Services.AddRouting(op =>
     op.AppendTrailingSlash = true;
     op.LowercaseUrls = true;
 });
+
+builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 
@@ -102,6 +105,11 @@ app.UseAuthorization();
 app.UseSession();
 
 app.MapStaticAssets();
+
+app.MapControllerRoute(
+    name: "page_sort",
+    pattern: "{controller}/{action}/page/{pageNumber}/size/{pageSize}/sort/{sortField}/{sortDirection}"
+);
 
 app.MapControllerRoute(
     name: "default",

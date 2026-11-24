@@ -11,10 +11,14 @@
     </div>
     <div class="col">
         <form method="post" asp-action="SubmitDocument" enctype="multipart/form-data" class="col-6 offset-3">
+
             <input asp-for="ApplicationId" value="@Model.ApplicationId" type="hidden" />
+            <input asp-for="ApplicationStatusId" value="@Model.ApplicationStatusId" type="hidden" />
+
             <div class="row mb-3">
                 <input type="file" id="documentation" asp-for="Documents" multiple accept=".pdf, .jpg, .jpeg, .png" class="form-control">
             </div>
+
             <div id="fileList" class="mt-2"></div>
 
             <div class="row">

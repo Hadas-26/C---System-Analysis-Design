@@ -1,8 +1,12 @@
 ﻿using MedicaidEmploymentVerificationApplication.Models;
+using MedicaidEmploymentVerificationApplication.Models.DataLayer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.Identity.Client.NativeInterop;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MedicaidEmploymentVerificationApplication.Controllers
 {
@@ -13,21 +17,75 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
 
-        private MevaContext context;
+        //private MevaContext context;
 
-        public EmployeeController(UserManager<User> userManager, SignInManager<User> signInManager, MevaContext context)
+        private IRepository<ApplicationStatus> statusData { get; set; }
+        private IRepository<Application> applicationData { get; set; }
+        private IRepository<ApplicationDocument> documentData { get; set; }
+
+        public EmployeeController(UserManager<User> userManager, SignInManager<User> signInManager, 
+            IRepository<ApplicationStatus> status, IRepository<Application> app, IRepository<ApplicationDocument> doc)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
-            this.context = context;
+            this.statusData = status;
+            this.applicationData = app;
+            this.documentData = doc;
         }
 
         [HttpGet]
-        public IActionResult Dashboard()
+        public IActionResult Dashboard(DashboardGridData gridData)
         {
-            var applicationsStatuses = context.ApplicationStatuses.Include(a => a.Application).Include(a => a.Employee).ToList();
-            var documents = context.Documents.Include(d => d.Application).ToList();
-            DashboardViewModel model = new DashboardViewModel { ApplicationDocuments = documents, ApplicationStatuses = applicationsStatuses };
+
+            var sort = gridData.SortField;
+
+            var query = new QueryOptions<ApplicationStatus>
+            {
+                Includes = "Application,Employee",
+                PageNumber = gridData.PageNumber,
+                PageSize = gridData.PageSize,
+                OrderByDirection = gridData.SortDirection,
+                OrderBy = s => s.SeenByEmployee,
+                ThenBy = s => s.IsApproved,
+            };
+
+            //if (!string.IsNullOrWhiteSpace(sort) && !sort.EqualsNoCase("all"))
+            //{
+            //    if(sort.EqualsNoCase(GridData.GetStatus(GridData.Status.Pending)))
+            //    {
+
+            //    }
+            //    else if(sort.EqualsNoCase(GridData.GetStatus(GridData.Status.Verified)))
+            //    {
+
+            //    }
+            //    else if(sort.EqualsNoCase(GridData.GetStatus(GridData.Status.Declined)))
+            //    {
+
+            //    }
+            //}
+            //else
+            //    query.OrderBy = s => s.SeenByEmployee;
+
+
+            var applicationStatuses = statusData.List(query).ToList();
+
+
+            var documents = documentData.List(new QueryOptions<ApplicationDocument>
+            {
+                Includes = "Application"
+            }).ToList();
+
+            int matchingCourseCount = query.HasWhere ? statusData.List(new QueryOptions<ApplicationStatus> { Where = query.Where }).Count() : statusData.Count;
+            var model = new DashboardViewModel
+            {
+                ApplicationDocuments = documents,
+                ApplicationStatuses = applicationStatuses,
+                CurrentRoute = gridData,
+                TotalPages = gridData.GetTotalPages(matchingCourseCount)
+            };
+
+            
             return View(model);
         }
 
@@ -41,13 +99,24 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 return Content("The application Status with that ID could not be found");
             }
 
-            var model = context.ApplicationStatuses.Include(s => s.Application).Include(s => s.Employee).FirstOrDefault(s => s.Id == applicationStatusId);
+            var model = statusData.Get(new QueryOptions<ApplicationStatus>
+            {
+                Includes = "Application,Employee",
+                Where = s => s.Id == applicationStatusId
+            });
+
+            
             if (model == null || model.Application == null)
             {
                 return Content("The application could not be found");
             }
 
-            List<ApplicationDocument> docs = context.Documents.Include(d => d.Application).Where(d => d.ApplicationId == model.ApplicationId).ToList();
+            List<ApplicationDocument> docs = documentData.List(new QueryOptions<ApplicationDocument>
+            {
+                Includes = "Application",
+                Where = d => d.ApplicationId == model.ApplicationId
+            }).ToList();
+            
             return View((model, docs));
         }
 
@@ -55,9 +124,8 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         [HttpGet]
         public IActionResult ViewDocument(int documentId)
         {
-            var doc = context.Documents.Find(documentId);
 
-
+            var doc = documentData.Get(documentId);
 
             if (doc == null)
             {
@@ -83,7 +151,10 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         public async Task<IActionResult> DocumentDecisionAsync(DocumentDecisionModel model)
         {
 
-            var document = context.Documents.FirstOrDefault(d => d.Id == model.DocumentId);
+            var document = documentData.Get(new QueryOptions<ApplicationDocument>
+            {
+                Where = d => d.Id == model.DocumentId
+            });
 
             if (document == null)
             {
@@ -95,14 +166,14 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             document.EmployeeId = userManager.GetUserId(User);
             document.DateApproved = model.Approved ? DateTime.Now : null;
 
-            var status = context.ApplicationStatuses.Find(model.StatusId);
+            var status = statusData.Get(model.StatusId);
 
             if(status != null)
             {
-                status.Seen = false;
+                status.SeenByApplicant = false;
             }
 
-            await context.SaveChangesAsync();
+            statusData.Save();
 
             return RedirectToAction("Review", "Employee", new { applicationStatusId = model.StatusId });
         }
@@ -118,8 +189,13 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             {
                 return Content("The application status could not be found.");
             }
-            var status = context.ApplicationStatuses.Include(s => s.Application).FirstOrDefault(s => s.Id == statusId);
 
+            var status = statusData.Get(new QueryOptions<ApplicationStatus>
+            {
+                Includes = "Application",
+                Where = s => s.Id == statusId
+
+            });
 
             return RedirectToAction("Dashboard", status?.Id);
         }
@@ -142,13 +218,13 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         public async Task<IActionResult> Notes(NotesViewModel model)
         {
 
-            var status = context.ApplicationStatuses.Find(model.StatusId);
+            var status = statusData.Get(model.StatusId);
 
             if (status == null)
                 return Content("Error locating Application Status.");
 
             status.Notes = model.Notes;
-            context.SaveChanges();
+            statusData.Save();
 
             await UpdateApplicationStatusAsync(model.StatusId, model.IsRejected ? false : null);
 
@@ -157,7 +233,13 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
 
         private async Task<bool> UpdateApplicationStatusAsync(int statusId, bool? approved)
         {
-            var status = context.ApplicationStatuses.Include(s => s.Application).FirstOrDefault(s => s.Id == statusId);
+            var status = statusData.Get(new QueryOptions<ApplicationStatus>
+            {
+                Includes = "Application",
+                Where = s => s.Id == statusId
+            });
+
+            
             if (status == null)
             {
                 return false;
@@ -166,13 +248,14 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             status.IsApproved = approved;
             status.EmployeeId = userManager.GetUserId(User);
             status.DateApproved = DateTime.Now;
-            status.Seen = false;
+            status.SeenByApplicant = false;
+            status.SeenByEmployee = true;
 
             if(approved != null && approved == true)
             {
                 status.Notes = string.Empty;
             }
-            await context.SaveChangesAsync();
+            statusData.Save();
 
             return true;
         }

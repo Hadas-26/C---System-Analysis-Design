@@ -3,6 +3,7 @@
     public class SubmitDocumentViewModel
     {
         public int ApplicationId { get; set; }
+        public int ApplicationStatusId { get; set; }
         public List<IFormFile> Documents { get; set; } = new List<IFormFile>();
     }
 }

@@ -47,7 +47,7 @@
 
             if (app != null)
             {
-                hasUnseenChanges = !mevaContext.ApplicationStatuses.FirstOrDefault(s => s.ApplicationId == app.Id)?.Seen ?? false;
+                hasUnseenChanges = !mevaContext.ApplicationStatuses.FirstOrDefault(s => s.ApplicationId == app.Id)?.SeenByApplicant ?? false;
 
                 <li class="nav-item pt-1 pb-1">
                     <a asp-action="CheckStatus" asp-controller="Home" class="nav-link @(controller == "Home" && action == "ApplicationStatus" ? "active" : "")">

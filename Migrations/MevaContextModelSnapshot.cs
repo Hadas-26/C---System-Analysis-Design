@@ -185,7 +185,10 @@ namespace MedicaidEmploymentVerificationApplication.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Seen")
+                    b.Property<bool>("SeenByApplicant")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("SeenByEmployee")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");

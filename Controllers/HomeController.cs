@@ -3,6 +3,7 @@
  */
 
 using MedicaidEmploymentVerificationApplication.Models;
+using MedicaidEmploymentVerificationApplication.Models.DataLayer;
 using MedicaidEmploymentVerificationApplication.Utilities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -22,13 +23,18 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         private UserManager<User> userManager;
         private SignInManager<User> signInManager;
 
-        private MevaContext context;
+        private IRepository<ApplicationStatus> statusData { get; set; }
+        private IRepository<Application> applicationData { get; set; }
+        private IRepository<ApplicationDocument> documentData { get; set; }
 
-        public HomeController(UserManager<User> userManager, SignInManager<User> signInManager, MevaContext context) 
+        public HomeController(UserManager<User> userManager, SignInManager<User> signInManager, IRepository<ApplicationStatus> statuses, 
+            IRepository<ApplicationDocument> documents,IRepository<Application> appData) 
         { 
             this.userManager = userManager; 
-            this.signInManager = signInManager; 
-            this.context = context; 
+            this.signInManager = signInManager;
+            this.statusData = statuses;
+            this.documentData = documents;
+            this.applicationData = appData;
         }
 
 
@@ -121,12 +127,21 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         {
             string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            Application? application = context.Applications.Where(a => a.UserId == userId).FirstOrDefault();
+            var application = applicationData.Get(new QueryOptions<Application>
+            {
+                Where = a => a.UserId == userId
+            });
 
-            var status = context.ApplicationStatuses.Include(s => s.Application).Where(a => a.Application.UserId == userId).FirstOrDefault();
+            var status = statusData.Get(new QueryOptions<ApplicationStatus>
+            {
+                Where = s => s.Application.UserId == userId,
+                Includes = "Application"
+            });
 
-            status?.Seen = true;
-            context.SaveChanges();
+            
+
+            status?.SeenByApplicant = true;
+            statusData.Save();
          
             return View(status);
         }
@@ -134,28 +149,45 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         [HttpGet]
         public IActionResult SubmitDocument()
         {
-            string userId = userManager.GetUserId(User);
+            string userId = userManager.GetUserId(User)!;
 
             if (userId == null)
                 return Content("User not found.");
 
-            var applicationId = context.Applications.Where(a => a.UserId == userId)?.FirstOrDefault()?.Id;
+            var applicationId = applicationData.Get(new QueryOptions<Application>
+            {
+                Where = a => a.UserId == userId
+            })?.Id;
 
             if (applicationId == null)
-                return Content("Appliation not found");
+                return Content("Appliation not found.");
+
+            var status = statusData.Get(new QueryOptions<ApplicationStatus>
+            {
+                Includes = "Application",
+                Where = s => s.ApplicationId == applicationId
+            })?.Id;
+
+            if (status == null)
+                return Content("Application Status not found.");
 
 
-            return View(new SubmitDocumentViewModel { ApplicationId = applicationId.Value});
+            return View(new SubmitDocumentViewModel { ApplicationId = applicationId.Value, ApplicationStatusId = status.Value});
         }
 
         [HttpPost]
         public IActionResult SubmitDocument(SubmitDocumentViewModel model)
         {
-            var application = context.Applications.Find(model.ApplicationId);
+
+            var application = applicationData.Get(model.ApplicationId);
+
             if (application == null)
                 return Content("Application not found");
 
             SaveDocuments(model.Documents, application, true);
+            var status = statusData.Get(model.ApplicationStatusId);
+            status?.SeenByEmployee = false;
+            statusData.Save();
 
             return RedirectToAction("Index", "Home");
         }
@@ -197,7 +229,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 UserId = userId
             };
 
-            context.Applications.Add(application);
+            applicationData.Insert(application);
 
             var documents = model.Documents?.Where(d => d != null && d.Length > 0).ToList();
 
@@ -212,9 +244,9 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 DateSubmitted = DateTime.Now
             };
 
-            context.ApplicationStatuses.Add(status);
+            statusData.Insert(status);
 
-            await context.SaveChangesAsync();
+            statusData.Save();
             return true;
         }
 
@@ -225,17 +257,18 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 if (document == null || document.Length == 0)
                     continue;
                 ApplicationDocument doc = new ApplicationDocument
+
                 {
                     Document = DocumentToByteConverter.Convert(document).Result,
                     Application = application,
                     Extension = Path.GetExtension(document.FileName).ToLowerInvariant()
                 };
-                context.Documents.Add(doc);
+                documentData.Insert(doc);
             }
 
             if(saveDocs)
             {
-                context.SaveChanges();
+                documentData.Save();
             }   
         }
         

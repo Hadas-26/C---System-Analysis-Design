@@ -4,6 +4,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using MedicaidEmploymentVerificationApplication.CustomAttributes;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace MedicaidEmploymentVerificationApplication.Models
 {
@@ -69,7 +70,8 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
         public bool PrimaryCaregiverStatus { get; set; }
 
-        public List<IFormFile> Documents { get; set; } = new();
+        
+        public List<IFormFile>? Documents { get; set; } = new();
 
         public string UserId { get; set; } = string.Empty;
     }

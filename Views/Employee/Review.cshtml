@@ -315,9 +315,14 @@
 
         <div class="d-flex gap-2 flex-wrap">
             
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">Approve This Application</button>
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">Reject This Application</button>
-            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#pendingModal">Further Documentation Needed</button>
+            @{
+                //If the documents are not reviewed, application cannot be approved/declined/postponed
+                var activeState = Model.Item2.Any(d => d.Reviewed == false) ? "disabled" : "";
+            }
+
+            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#approveModal" @activeState>Approve This Application</button>
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal" @activeState>Reject This Application</button>
+            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#pendingModal" @activeState>Further Documentation Needed</button>
             <a asp-controller="Employee" asp-action="Dashboard" class="btn btn-outline-primary ms-auto">Back To Dashboard</a>
         </div>
 

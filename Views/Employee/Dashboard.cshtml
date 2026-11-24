@@ -2,12 +2,15 @@
 <!--This page is for medicaid employee use only and represents the employee dashboard-->
 
 @model DashboardViewModel
+@using MedicaidEmploymentVerificationApplication.Models.DataLayer
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<User> signInManager;
 @inject UserManager<User> userManager;
 
 @{
     ViewBag.Title = "Dashboard";
+    DashboardGridData current = Model.CurrentRoute;
+    GridData routes = Model.CurrentRoute.Clone();
 }
 
 
@@ -88,13 +91,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @{
-                        var list = Model.ApplicationStatuses.OrderBy(s => s.IsApproved);
-                        
-                    }
-                    @foreach(var app in list)
+                    @foreach(var app in Model.ApplicationStatuses)
                     {   
-                        <tr>
+                        <tr class="@(!app.SeenByEmployee ? "table-primary" : "")">
                             <th scope="row">APP# @app.Application.Id</th>
                             <td>@app.Application.FirstName @app.Application.LastName</td>
                             @if (app.DateSubmitted != null)
@@ -136,5 +135,13 @@
                 </tbody>
             </table>
         </div>
+
+        @{
+			
+            for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <my-paging-link number="@i" current="current" />
+            }
+        }
     </div>
 </div>

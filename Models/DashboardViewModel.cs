@@ -8,5 +8,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
     {
         public List<ApplicationStatus> ApplicationStatuses { get; set; } = new();
         public List<ApplicationDocument> ApplicationDocuments { get; set; } = new();
+        public DashboardGridData CurrentRoute { get; set; } = new DashboardGridData();
+        public int TotalPages { get; set; }
     }
 }
