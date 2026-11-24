@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<User> signInManager;
 @inject UserManager<User> userManager;
+@inject MevaContext mevaContext;
 
 @{
     ViewBag.Title = "Home Page";
@@ -17,6 +18,9 @@
     <div class="col mt-3">
         <div class="text-center">
 
+
+            <h1 class="display-4 mb-3 mb-md-5">Apply for MO HealthNet through the <strong>MEVA</strong> Application</h1>
+
             <div class="bg-warning rounded m-3 ps-1 pe-1 pt-3 pb-3 text-wrap">
                 <h5><strong>Notice:</strong> This website is a class project. It is not an official website and it is not affiliated with any government entity.</h5>
             </div>
@@ -25,10 +29,8 @@
                 <h5>Take the Monkey survey to help us improve the site at <a href="https://www.surveymonkey.com/r/JWWDHY3" class="text-break">https://www.surveymonkey.com/r/JWWDHY3</a></h5>
             </div>
 
-
-            <h1 class="display-4 mb-3 mb-md-5">Apply for MO HealthNet through the <strong>MEVA</strong> Application</h1>
             <div class="row mb-3 mb-md-5">
-                <div class="col-md-6 offset-md-3">
+                <div class="col-md-10 offset-md-1">
                     <img src="/images/happy_family.jpg" class="img-fluid rounded" />
                 </div>
             </div>
@@ -89,6 +91,26 @@
 
         </div>
     </div>
+
+</div>
+
+@* <div class="toast-container position-static">
+    <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="notice_toast">
+        <div class="toast-header">
+            <strong class="me-auto">Notification</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            An update has been made to your application status.
+        </div>
+    </div>
 </div>
 
 
+
+@section Scripts {
+    <script>
+        const toastElement = document.getElementById('notice_toast');
+        new bootstrap.Toast(toastElement).show();
+    </script>
+} *@

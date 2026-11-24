@@ -9,21 +9,21 @@
 
 
 <div class="row">
+
     <partial name="SideMenu" />
 
     <div class="col mt-3 text-center">
-        <div class="bg-warning rounded m-3 ps-1 pe-1 pt-3 pb-3 text-wrap">
-            <h5><strong>Notice:</strong> Although this page will accurately reflect your application's status, this page is still under construction and is not yet out of the design phase.</h5>
+        <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
+            <h1>Application Status</h1>
         </div>
-        <h1>Application Status</h1>
 
         @if(Model != null)
         {
             @if(Model.Application != null)
             {
-                <p>This application is for @Model.Application.FirstName @Model.Application.LastName</p>
-                <div class="card border-dark mb-3">
-                    <div class="card-header">Application Status</div>
+                
+                <div class="card border-dark m-3">
+                    <div class="card-header"><h3>Current Status</h3></div>
                     <div class="card-body">
 
                         @switch(Model.IsApproved)
@@ -45,6 +45,11 @@
                                     <p class="card-text">
                                         <strong>@Model.Notes</strong>
                                     </p>
+                                    <div class="row">
+                                        <div class="col">
+                                            <a asp-action="SubmitDocument" asp-controller="Home" class="btn btn-primary">Submit additional documentation</a>
+                                        </div>
+                                    </div>
                                 }
                                 break;
                             case true:
@@ -57,6 +62,11 @@
                                     <h5 class="card-title">Your application has been denied for the following reasons:</h5>
 
                                     <p class="card-text">@Model.Notes</p>
+                                    <div class="row">
+                                        <div class="col">
+                                            <a asp-action="SubmitDocument" asp-controller="Home" class="btn btn-primary">Submit additional documentation</a>
+                                        </div>
+                                    </div>
                                 }
                                 else
                                 {
@@ -68,18 +78,6 @@
                                 }
                                 break;
                         }
-                        @if(Model.IsApproved == null)
-                            {
-                                
-                            }
-                            else if(Model.IsApproved != null && Model.IsApproved == false)
-                            {
-                                
-                            }
-                            else if(Model.IsApproved != null && Model.IsApproved == true)
-                            {
-                                
-                            }
 
                     </div>
                 </div>
@@ -91,5 +89,180 @@
                     If you believe this is an error, please contact us at 1-(888)-888-8888.</p>
             }
         }
+
+        <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
+            <h1>Application Details</h1>
+            <br />
+            <p>Submitted on @DateOnly.FromDateTime(Model?.DateSubmitted ?? DateTime.Now).ToLongDateString()</p>
+        </div>
+
+        @if (Model != null && Model.Application != null)
+        {
+            <div class="col m-3 text-start">
+                <div class="list-group">
+
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Name and Sex</h5>
+                        <p>@Model.Application.FirstName @(Model.Application.MiddleInitial != null ? Model.Application.MiddleInitial : "") @Model.Application.LastName</p>
+                        <p>Sex: @Model.Application?.Sex</p>
+                    </div>
+
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Address</h5>
+                        <p>@($"{Model.Application!.StreetAddress}")</p>
+                        <p>@($"{Model.Application.City}, {Model.Application.State} {Model.Application.ZipCode}")</p>
+                    </div>
+
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Contact Information</h5>
+                        <p>Phone: @Model.Application.PhoneNumber</p>
+                        <p>Email: @Model.Application.EmailAddress</p>
+                    </div>
+
+                    @{
+                        string employment = Model.Application.EmploymentStatus;
+                        string education = Model.Application.EducationStatus;
+                        string volunteer = Model.Application.VolunteerStatus;
+                    }
+
+                    <!--Employment Data-->
+                    @if (employment.ToLower() == "retired" || employment.ToLower() == "unemployed")
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Employment</h5>
+                            <p>Applicant is either retired or otherwise unemployed</p>
+                        </div>
+                    }
+                    else if (employment.ToLower() == "EmployedHalftime".ToLower())
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Employment</h5>
+                            <p>Half-time</p>
+                            <p>Employer Name: @Model.Application.Employer</p>
+                            <p>Hourly wage is @Model.Application.HourlyRate?.ToString("c2")</p>
+                            @if (Model.Application.HourlyRate != null)
+                            {
+                                <p>A halftime work week at this salary would approximately gross @((Model.Application.HourlyRate * 20 * 4)?.ToString("c2"))  per month</p>
+                            }
+                            else
+                            {
+                                <p>Could not calculate monthly income. Hourly rate is missing.</p>
+                            }
+                        </div>
+                    }
+                    else if (employment.ToLower() == "EmployedFulltime".ToLower())
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Employment</h5>
+                            <p>Employed full-time</p>
+                            <p>Employer Name: @Model.Application.Employer</p>
+                            <p>Hourly wage: @Model.Application.HourlyRate?.ToString("c2")</p>
+                            @if (Model.Application.HourlyRate != null)
+                            {
+                                <p>A fulltime work week at this salary would approximately gross @((Model.Application.HourlyRate * 40 * 4)?.ToString("c2"))  per month</p>
+                            }
+                            else
+                            {
+                                <p>Could not calculate monthly income. Hourly rate is missing.</p>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Employment</h5>
+                            <p>Employment info could not be gathered. There may be an error in the application</p>
+                        </div>
+                    }
+
+                    <!--Education Data-->
+                    @if (education.ToLower() == "notattending")
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Education</h5>
+                            <p>Not attending an educational institution</p>
+                        </div>
+                    }
+                    else if (education.ToLower() == "parttime")
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Education</h5>
+                            <p>Attending part-time</p>
+                            <p>Taking @Model.Application.EducationHours?.ToString("n1") credit hours this semester.</p>
+                        </div>
+                    }
+                    else if (education.ToLower() == "fulltime")
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Education</h5>
+                            <p>Attending full-time</p>
+                            <p>Taking @Model.Application.EducationHours?.ToString("n1") credit hours this semester.</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Education</h5>
+                            <p>Education info could not be gathered. There may be an error in the application</p>
+                        </div>
+                    }
+
+
+                    <!--Volunteer Data-->
+                    @if (volunteer.ToLower() == "active")
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Volunteer Work</h5>
+                            <p>Actively volunteering</p>
+                            <p>Weekly Volunteer Hours: @Model.Application.VolunteerHours?.ToString("n0")</p>
+                        </div>
+                    }
+                    else if (volunteer.ToLower() == "inactive")
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Volunteer Work</h5>
+                            <p>Not currently volunteering at any establishment</p>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="list-group-item">
+                            <h5 class="mb-1">Volunteer Work</h5>
+                            <p>Volunteer info could not be gathered. There may be an error in the application</p>
+                        </div>
+                    }
+
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Marital Status</h5>
+                        <p>@Model.Application.MaritalStatus</p>
+                    </div>
+
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Potential Exemptions</h5>
+                        @if (Model.Application.PregnancyStatus == true)
+                        {
+                            <p>Applicant may qualify for a pregnancy exemption. Check for a doctors note, or other valid documented proof.</p>
+                        }
+                        @if (Model.Application.DisabilityStatus == true)
+                        {
+                            <p>Applicant may qualify for a disability exemption. Check for a doctors note, or other valid documented proof.</p>
+                        }
+                        @if (Model.Application.PrimaryCaregiverStatus == true)
+                        {
+                            <p>Applicant may qualify for a caregiver exemption. Check for valid documented proof of caregiver status.</p>
+                        }
+
+                        @if (Model.Application.PregnancyStatus == false && Model.Application.DisabilityStatus == false && Model.Application.PrimaryCaregiverStatus == false)
+                        {
+                            <p>Applicant does not qualify for any exemptions according to their application, and in accordance with federal law.</p>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        }
+
     </div>
+
+    
 </div>

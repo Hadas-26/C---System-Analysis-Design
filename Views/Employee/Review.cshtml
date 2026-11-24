@@ -1,5 +1,4 @@
 ﻿<!--Written by Josh Green-->
-
 @model (ApplicationStatus, List<ApplicationDocument>)
 
 
@@ -13,7 +12,7 @@
     <div class="col mt-3">
 
         <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
-             <h2>Application Details</h2>
+            <h2>Application Details</h2>
         </div>
 
         <div class="list-group">
@@ -43,15 +42,14 @@
             }
 
             <!--Employment Data-->
-
-            @if(employment.ToLower() == "retired" || employment.ToLower() == "unemployed")
+            @if (employment.ToLower() == "retired" || employment.ToLower() == "unemployed")
             {
                 <div class="list-group-item">
                     <h5 class="mb-1">Applicant Employment</h5>
                     <p>Applicant is either retired or otherwise unemployed</p>
                 </div>
             }
-            else if(employment.ToLower() == "EmployedHalftime".ToLower())
+            else if (employment.ToLower() == "EmployedHalftime".ToLower())
             {
                 <div class="list-group-item">
                     <h5 class="mb-1">Applicant Employment</h5>
@@ -60,14 +58,14 @@
                     <p>Applicant hourly wage is @Model.Item1.Application.HourlyRate?.ToString("c2")</p>
                 </div>
             }
-            else if(employment.ToLower() == "EmployedFulltime".ToLower())
+            else if (employment.ToLower() == "EmployedFulltime".ToLower())
             {
                 <div class="list-group-item">
                     <h5 class="mb-1">Applicant Employment</h5>
                     <p>Applicant is employed full-time</p>
                     <p>Employer Name: @Model.Item1.Application.Employer</p>
                     <p>Applicant hourly wage is @Model.Item1.Application.HourlyRate?.ToString("c2")</p>
-                    @if(Model.Item1.Application.HourlyRate != null)
+                    @if (Model.Item1.Application.HourlyRate != null)
                     {
                         <p>A fulltime work week at this salary would approximately gross @((Model.Item1.Application.HourlyRate * 40 * 4)?.ToString("c2"))  per month</p>
                     }
@@ -86,15 +84,14 @@
             }
 
             <!--Education Data-->
-
-            @if(education.ToLower() == "notattending")
+            @if (education.ToLower() == "notattending")
             {
                 <div class="list-group-item">
                     <h5 class="mb-1">Applicant Education</h5>
                     <p>Applicant is not attending an educational institution</p>
                 </div>
             }
-            else if(education.ToLower() == "parttime")
+            else if (education.ToLower() == "parttime")
             {
                 <div class="list-group-item">
                     <h5 class="mb-1">Applicant Education</h5>
@@ -102,7 +99,7 @@
                     <p>Applicant is taking @Model.Item1.Application.EducationHours?.ToString("n1") credit hours this semester.</p>
                 </div>
             }
-            else if(education.ToLower() == "fulltime")
+            else if (education.ToLower() == "fulltime")
             {
                 <div class="list-group-item">
                     <h5 class="mb-1">Applicant Education</h5>
@@ -113,7 +110,7 @@
             else
             {
                 <div class="list-group-item">
-                    <h5 class="mb-1">Applicant Employment</h5>
+                    <h5 class="mb-1">Applicant Education</h5>
                     <p>Education info could not be gathered. There may be an error in the application</p>
                 </div>
             }
@@ -128,7 +125,7 @@
                     <p>Weekly Volunteer Hours: @Model.Item1.Application.VolunteerHours?.ToString("n0")</p>
                 </div>
             }
-            else if(volunteer.ToLower() == "inactive")
+            else if (volunteer.ToLower() == "inactive")
             {
                 <div class="list-group-item">
                     <h5 class="mb-1">Applicant Volunteer Work</h5>
@@ -150,15 +147,15 @@
 
             <div class="list-group-item">
                 <h5 class="mb-1">Potential Exemptions</h5>
-                @if(Model.Item1.Application.PregnancyStatus == true)
+                @if (Model.Item1.Application.PregnancyStatus == true)
                 {
                     <p>The applicant may qualify for a pregnancy exemption. Check for a doctors note, or other valid documented proof.</p>
                 }
-                @if(Model.Item1.Application.DisabilityStatus == true)
+                @if (Model.Item1.Application.DisabilityStatus == true)
                 {
                     <p>The applicant may qualify for a disability exemption. Check for a doctors note, or other valid documented proof.</p>
                 }
-                @if(Model.Item1.Application.PrimaryCaregiverStatus == true)
+                @if (Model.Item1.Application.PrimaryCaregiverStatus == true)
                 {
                     <p>The applicant may qualify for a caregiver exemption. Check for valid documented proof of caregiver status.</p>
                 }
@@ -173,6 +170,7 @@
 
 
         </div>
+    
 
         <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
             <h2>Associated Documentation</h2>
@@ -188,7 +186,7 @@
             int docIndex = 1;
         }
 
-        @if(Model.Item2.Where(d => d.Extension == ".pdf").ToList().Count > 0)
+        @if (Model.Item2.Where(d => d.Extension == ".pdf").ToList().Count > 0)
         {
 
             
@@ -198,7 +196,7 @@
                 {
                     <div class="list-group-item">
                         <a asp-action="ViewDocument" asp-route-documentId="@d.Id" target="_blank">Document @docIndex</a>
-                        @if(true)
+                        @if (true)
                         {
                             docIndex++;
                         }
@@ -331,73 +329,74 @@
 
 
 
-<!-- Approve Modal -->
-<div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-            Approving this document means that you have confirmed the authenticity of any documentation and the applicant is eligible for Medicaid and will begin receiving  coverage.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <form method="post" asp-action="ApplicationDecision" asp-controller="Employee">
-            <input name="statusId" type="hidden" value="@Model.Item1.Id"/>
-            <input name="approved" type="hidden" value="true"/>
-            <button type="submit" class="btn btn-primary">Approve?</button>
-        </form>
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Approve Modal -->
+        <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Approving this document means that you have confirmed the authenticity of any documentation and the applicant is eligible for Medicaid and will begin receiving  coverage.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form method="post" asp-action="ApplicationDecision" asp-controller="Employee">
+                            <input name="statusId" type="hidden" value="@Model.Item1.Id" />
+                            <input name="approved" type="hidden" value="true" />
+                            <button type="submit" class="btn btn-primary">Approve?</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- Reject Modal -->
-<div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-            Rejecting this application means that the applicant is ineligible for Medicaid coverage.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <form method="get" asp-action="Notes" asp-controller="Employee">
-                <input name="statusId" value="@Model.Item1.Id" type="hidden" />
-                <input name="rejected" value="true" type="hidden" />
-                <button type="submit" class="btn btn-primary">Reject?</button>
-            </form>
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Reject Modal -->
+        <div class="modal fade" id="rejectModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Rejecting this application means that the applicant is ineligible for Medicaid coverage.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form method="get" asp-action="Notes" asp-controller="Employee">
+                            <input name="statusId" value="@Model.Item1.Id" type="hidden" />
+                            <input name="rejected" value="true" type="hidden" />
+                            <button type="submit" class="btn btn-primary">Reject?</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<!-- Pending Modal -->
-<div class="modal fade" id="pendingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-            This action will put the application into a pending status and notify the applicant that something more is needed to verify their eligibility.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-            <form method="get" asp-action="Notes" asp-controller="Employee">
-                <input name="statusId" value="@Model.Item1.Id" type="hidden" />
-                <input name="rejected" value="false" type="hidden" />
-                <button type="submit" class="btn btn-primary">Postpone?</button>
-            </form>
-      </div>
-    </div>
-  </div>
-</div>
+        <!-- Pending Modal -->
+        <div class="modal fade" id="pendingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Are You Sure?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        This action will put the application into a pending status and notify the applicant that something more is needed to verify their eligibility.
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form method="get" asp-action="Notes" asp-controller="Employee">
+                            <input name="statusId" value="@Model.Item1.Id" type="hidden" />
+                            <input name="rejected" value="false" type="hidden" />
+                            <button type="submit" class="btn btn-primary">Postpone?</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+    </div>
 </div>

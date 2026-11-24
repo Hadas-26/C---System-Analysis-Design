@@ -88,7 +88,11 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach(var app in Model.ApplicationStatuses)
+                    @{
+                        var list = Model.ApplicationStatuses.OrderBy(s => s.IsApproved);
+                        
+                    }
+                    @foreach(var app in list)
                     {   
                         <tr>
                             <th scope="row">APP# @app.Application.Id</th>
@@ -99,7 +103,7 @@
                             }
                             else
                             {
-                                <td>Not Found</td>
+                                <td>Date Not Found</td>
                             }
 
                             @{

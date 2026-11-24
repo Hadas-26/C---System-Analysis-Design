@@ -76,7 +76,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                     }
                     return RedirectToAction("ApplicationSubmitted");
                 }
-                catch (Exception ex)
+                catch
                 {
                     //Log exception
                     return RedirectToAction("Index");
@@ -131,7 +131,34 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             return View(status);
         }
 
-        
+        [HttpGet]
+        public IActionResult SubmitDocument()
+        {
+            string userId = userManager.GetUserId(User);
+
+            if (userId == null)
+                return Content("User not found.");
+
+            var applicationId = context.Applications.Where(a => a.UserId == userId)?.FirstOrDefault()?.Id;
+
+            if (applicationId == null)
+                return Content("Appliation not found");
+
+
+            return View(new SubmitDocumentViewModel { ApplicationId = applicationId.Value});
+        }
+
+        [HttpPost]
+        public IActionResult SubmitDocument(SubmitDocumentViewModel model)
+        {
+            var application = context.Applications.Find(model.ApplicationId);
+            if (application == null)
+                return Content("Application not found");
+
+            SaveDocuments(model.Documents, application, true);
+
+            return RedirectToAction("Index", "Home");
+        }
 
         
 
