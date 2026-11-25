@@ -63,25 +63,36 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if(ModelState.IsValid)
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            if (model.ConfirmPassword != model.Password)
+                ModelState.AddModelError(nameof(RegisterViewModel.ConfirmPassword), "Passwords don't match. Please double check spelling.");
+            if (await userManager.FindByEmailAsync(model.Email) != null)
+                ModelState.AddModelError(nameof(RegisterViewModel.Email), "Email address is already registered.");
+
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = new User { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
+            var result = await userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
             {
-                var user = new User { UserName = model.Username, Email = model.Email, FirstName = model.FirstName, LastName = model.LastName };
-                var result = await userManager.CreateAsync(user, model.Password);
-                if(result.Succeeded)
+                await userManager.AddToRoleAsync(user, "Applicant");
+                //await userManager.AddToRoleAsync(user, "Employee"); // Employees must not be created this way in production
+                await signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                foreach (var error in result.Errors)
                 {
-                    await userManager.AddToRoleAsync(user, "Applicant");
-                    //await userManager.AddToRoleAsync(user, "Employee"); // Employees must not be created this way in production
-                    await signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    foreach(var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
+                    ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
+
             return View(model);
         }
 

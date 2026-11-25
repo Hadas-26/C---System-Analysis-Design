@@ -49,24 +49,6 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 ThenBy = s => s.IsApproved,
             };
 
-            //if (!string.IsNullOrWhiteSpace(sort) && !sort.EqualsNoCase("all"))
-            //{
-            //    if(sort.EqualsNoCase(GridData.GetStatus(GridData.Status.Pending)))
-            //    {
-
-            //    }
-            //    else if(sort.EqualsNoCase(GridData.GetStatus(GridData.Status.Verified)))
-            //    {
-
-            //    }
-            //    else if(sort.EqualsNoCase(GridData.GetStatus(GridData.Status.Declined)))
-            //    {
-
-            //    }
-            //}
-            //else
-            //    query.OrderBy = s => s.SeenByEmployee;
-
 
             var applicationStatuses = statusData.List(query).ToList();
 
@@ -85,6 +67,8 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 TotalPages = gridData.GetTotalPages(matchingCourseCount)
             };
 
+            SetApplicantCount();
+            SetPendingCount();
             
             return View(model);
         }
@@ -120,7 +104,8 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
             return View((model, docs));
         }
 
-        [Authorize(Roles = "Employee")]
+        [Authorize(Roles = "Employee,Applicant")]
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult ViewDocument(int documentId)
         {
@@ -259,5 +244,26 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
 
             return true;
         }
+
+        private void SetApplicantCount()
+        {
+            var count = statusData.Count.ToString();
+            ViewBag.ApplicationStatuses = count;
+        }
+
+        private void SetPendingCount()
+        {
+
+            var query = new QueryOptions<ApplicationStatus>
+            {
+                Where = m => m.IsApproved == null
+            };
+
+            ViewBag.Pending = statusData.List(query).Count().ToString();
+
+
+        }
+
+        //private void Set
     }
 }

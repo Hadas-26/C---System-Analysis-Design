@@ -19,6 +19,7 @@ namespace MedicaidEmploymentVerificationApplication.Models
 
         [Required(ErrorMessage = "Please enter a Username.")]
         [StringLength(255, ErrorMessage = "Please select a shorter username.")]
+        [MinLength(6, ErrorMessage = "Username must be a minimum of 6 characters in length.")]
         public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Please enter an email address.")]

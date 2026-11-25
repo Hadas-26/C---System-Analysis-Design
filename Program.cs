@@ -40,6 +40,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
     options.Password.RequireNonAlphanumeric = false;
+    options.User.RequireUniqueEmail = true;
+    
 })
     .AddEntityFrameworkStores<MevaContext>()
     .AddDefaultTokenProviders();

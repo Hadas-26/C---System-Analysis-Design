@@ -38,7 +38,7 @@
                     </div>
                     <div class="col">
                         <div class="row">Total Applicants</div>
-                        <div class="row fw-bold fs-3">@Model.ApplicationStatuses.Count</div>
+                        <div class="row fw-bold fs-3">@ViewBag.ApplicationStatuses</div>
                         <div class="row">Applications recieved</div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col">
                         <div class="row">Applications Pending Review</div>
-                        <div class="row fw-bold fs-3">@Model.ApplicationStatuses.Where(m => m.IsApproved == null).ToList().Count</div>
+                        <div class="row fw-bold fs-3">@ViewBag.Pending</div>
                         <div class="row">Need Verification</div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                     <div class="col">
                         <div class="row">Documents</div>
                         <div class="row fw-bold fs-3">@Model.ApplicationDocuments.Where(d => d.Reviewed == false).ToList().Count</div>
-                        <div class="row">Awaiting Verification</div>
+                        <div class="row">Awaiting Review</div>
                     </div>
                 </div>
             </div>

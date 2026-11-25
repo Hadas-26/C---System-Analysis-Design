@@ -98,9 +98,7 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
         [HttpGet]
         public IActionResult ApplicationSubmitted()
         {
-
             return View();
-            
         }
 
         [AllowAnonymous]
@@ -138,12 +136,23 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 Includes = "Application"
             });
 
-            
+            var documents = documentData.List(new QueryOptions<ApplicationDocument>
+            {
+                Where = d => d.ApplicationId == application.Id,
+                Includes = "Application"
+            });
+
+            var model = new CheckStatusViewModel
+            {
+                Application = application,
+                Documents = documents.ToList(),
+                ApplicationStatus = status
+            };
 
             status?.SeenByApplicant = true;
             statusData.Save();
          
-            return View(status);
+            return View(model);
         }
 
         [HttpGet]

@@ -1,6 +1,6 @@
 ﻿<!--Written by Josh Green-->
 
-@model ApplicationStatus
+@model CheckStatusViewModel
 
 @{
     ViewBag.Title = "Application Status";
@@ -26,10 +26,10 @@
                     <div class="card-header"><h3>Current Status</h3></div>
                     <div class="card-body">
 
-                        @switch(Model.IsApproved)
+                        @switch(Model.ApplicationStatus.IsApproved)
                         {
                             case null:
-                                if(string.IsNullOrWhiteSpace(Model.Notes))
+                                if(string.IsNullOrWhiteSpace(Model.ApplicationStatus.Notes))
                                 {
                                     <h5 class="card-title">Your application has not been reviewed yet.</h5>
 
@@ -43,7 +43,7 @@
                                     <h5 class="card-title">A reviewer has left a note regarding your application:</h5>
 
                                     <p class="card-text">
-                                        <strong>@Model.Notes</strong>
+                                        <strong>@Model.ApplicationStatus.Notes</strong>
                                     </p>
                                     <div class="row">
                                         <div class="col">
@@ -53,15 +53,15 @@
                                 }
                                 break;
                             case true:
-                                <h5 class="card-title">Your application has been approved!</h5>
+                                <h5 class="card-title text-success">Your application has been approved!</h5>
                                 <p class="card-text">You are now a enrolled in Missouri HealthNet.</p>
                                 break;
                             case false:
-                                if(!string.IsNullOrWhiteSpace(Model.Notes))
+                                if(!string.IsNullOrWhiteSpace(Model.ApplicationStatus.Notes))
                                 {
-                                    <h5 class="card-title">Your application has been denied for the following reasons:</h5>
+                                    <h5 class="card-title text-danger">Your application has been denied for the following reasons:</h5>
 
-                                    <p class="card-text">@Model.Notes</p>
+                                    <p class="card-text">@Model.ApplicationStatus.Notes</p>
                                     <div class="row">
                                         <div class="col">
                                             <a asp-action="SubmitDocument" asp-controller="Home" class="btn btn-primary">Submit additional documentation</a>
@@ -93,7 +93,7 @@
         <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
             <h1>Application Details</h1>
             <br />
-            <p>Submitted on @DateOnly.FromDateTime(Model?.DateSubmitted ?? DateTime.Now).ToLongDateString()</p>
+            <p>Submitted on @DateOnly.FromDateTime(Model?.ApplicationStatus?.DateSubmitted ?? DateTime.Now).ToLongDateString()</p>
         </div>
 
         @if (Model != null && Model.Application != null)
@@ -241,24 +241,78 @@
                         <h5 class="mb-1">Potential Exemptions</h5>
                         @if (Model.Application.PregnancyStatus == true)
                         {
-                            <p>Applicant may qualify for a pregnancy exemption. Check for a doctors note, or other valid documented proof.</p>
+                            <p>You may qualify for a pregnancy exemption. Check for a doctors note, or other valid documented proof.</p>
                         }
                         @if (Model.Application.DisabilityStatus == true)
                         {
-                            <p>Applicant may qualify for a disability exemption. Check for a doctors note, or other valid documented proof.</p>
+                            <p>You may qualify for a disability exemption. Check for a doctors note, or other valid documented proof.</p>
                         }
                         @if (Model.Application.PrimaryCaregiverStatus == true)
                         {
-                            <p>Applicant may qualify for a caregiver exemption. Check for valid documented proof of caregiver status.</p>
+                            <p>You may qualify for a caregiver exemption. Check for valid documented proof of caregiver status.</p>
                         }
 
                         @if (Model.Application.PregnancyStatus == false && Model.Application.DisabilityStatus == false && Model.Application.PrimaryCaregiverStatus == false)
                         {
-                            <p>Applicant does not qualify for any exemptions according to their application, and in accordance with federal law.</p>
+                            <p>You do not qualify for any exemptions according to your application, and in accordance with federal law.</p>
                         }
                     </div>
 
                 </div>
+
+                <div class="row healthnet-bg-blue text-white text-center m-3 rounded p-3">
+                    <h2>Associated Documentation</h2>
+                    <p>
+                        Documentation provided must be an acceptable form.
+                        Doctor's notes must come from recognized healthcare providers,
+                        employment information must come from valid employers,
+                        and volunteer paperwork must come from recognized organizations.
+                    </p>
+                </div>
+
+                @{
+                    int docIndex = 1;
+                }
+
+                @if (Model.Documents.Where(d => d.Extension == ".pdf").ToList().Count > 0)
+                {
+
+            
+                    <h4 class="mt-2">PDF Documents</h4>
+                    <div class="list-group mt-1">
+                        @foreach (var d in Model.Documents.Where(d => d.Extension == ".pdf").ToList())
+                        {
+                            <div class="list-group-item">
+                                <a asp-action="ViewDocument" asp-route-documentId="@d.Id" target="_blank">Document @docIndex</a>
+                                @if (true)
+                                {
+                                    docIndex++;
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+
+                @{
+                    string[] imagesExt = [".png", ".jpeg", ".jpg"];
+                }
+
+                @if (Model.Documents.Where(d => imagesExt.Contains(d.Extension)).ToList().Count > 0)
+                {
+                    <h4 class="mt-2">Document Images</h4>
+
+                    <div class="row ms-md-2 me-md-2">
+                        @foreach (var image in Model.Documents.Where(d => imagesExt.Contains(d.Extension)).ToList())
+                        {
+                            <div class="col-md-4 p-2">
+                                <div class="card" style="box-shadow: 0 0 4px black">
+                                    <img src="@Url.Action("ViewDocument", "Employee", new { documentId = image.Id })" class="card-img-top" />
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                }
             </div>
         }
 
