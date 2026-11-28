@@ -71,6 +71,8 @@ namespace MedicaidEmploymentVerificationApplication.Controllers
                 ModelState.AddModelError(nameof(RegisterViewModel.ConfirmPassword), "Passwords don't match. Please double check spelling.");
             if (await userManager.FindByEmailAsync(model.Email) != null)
                 ModelState.AddModelError(nameof(RegisterViewModel.Email), "Email address is already registered.");
+            if (await userManager.FindByNameAsync(model.Username) != null)
+                ModelState.AddModelError(nameof(RegisterViewModel.Username), "Sorry, that username is already in use. Please select another one.");
 
             if (!ModelState.IsValid)
                 return View(model);
